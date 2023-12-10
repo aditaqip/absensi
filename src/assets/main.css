@@ -1,0 +1,27 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.bg-check-in{
+  background: linear-gradient(191deg, #629C7F 46.92%, #00407C 79.6%);
+}
+
+.swiper-pagination-bullets {
+  position: relative !important;
+  margin-top: 15px;
+}
+.swiper-pagination-bullet{
+  margin: 0 1px !important;
+  background-color: white !important;
+  opacity: 1 !important;
+  transition: .2s;
+}
+.swiper-pagination-bullet.swiper-pagination-bullet-active{
+  width: 26px !important;
+  border-radius: 20px;
+  transition: .2s;
+}
+*{
+  font-family: 'Patrick Hand', cursive;
+  font-family: 'Poppins', sans-serif;
+}
