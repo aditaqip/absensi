@@ -19,11 +19,11 @@
                         </button>
                         <div>Show <input type="number" class="ml-3 pl-5 w-16 h-6 border border-black rounded-lg" /></div>
                     </div>
-                    <table class="w-full">
+                    <table class="w-full table whitespace-nowrap">
                         <thead class="w-3/5 font-thin">
                             <tr class="border-b-[1px]">
                                 <th class="py-2">No</th>
-                                <th class="py-2"  v-for="head in label">{{head.name}}</th>
+                                <th class="px-4 py-1"  v-for="head in label">{{head.name}}</th>
                                 <th class="py-2 w-20"></th>
                             </tr>
                         </thead>

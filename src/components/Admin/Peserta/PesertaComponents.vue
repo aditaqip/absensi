@@ -16,13 +16,13 @@
                             </span>
                             <span>Tambah Data Peserta</span>
                         </button>
-                        <div>Show <input type="number" class="ml-3 pl-5 w-16 h-6 border border-black rounded-lg" :value="dataMounted" /></div>
+                        <div>Show <input type="number" class="ml-3 pl-5 w-16 h-6 border border-black rounded-lg my-8" :value="dataMounted" /></div>
                     </div>
-                    <table class="w-full">
+                    <table class="w-full table whitespace-nowrap">
                         <thead class="w-3/5 font-thin">
                             <tr class="border-b-[1px]">
                                 <th class="py-2">No</th>
-                                <th class="py-2"  v-for="head in label">{{head.name}}</th>
+                                <th class="px-4 py-1"  v-for="head in label">{{head.name}}</th>
                                 <th class="py-2 w-20"></th>
                             </tr>
                         </thead>
@@ -60,7 +60,7 @@
             </div>
         </div>
     </div>
-    <div class="backdrop-brightness-50 w-full p-3 left-0 right-0 top-0 flex justify-center items-center" :class="(createState) ? 'absolute z-50' : 'hidden'">
+    <div class="backdrop-brightness-50 w-full p-3 left-0 right-0 top-0 flex justify-center items-center" :class="(createState) ? 'absolute z-50' : 'hidden'" @click.self="createState=false">
         <form @keydown.esc="createState = false" @submit.prevent="handleSubmit" class="bg-white p-4 h-screen rounded-2xl w-4/5 p-3 md:p-14 overflow-y-auto">
             <div class="text-2xl font-medium flex">
                 <div class="pb-3">
@@ -97,7 +97,7 @@
                             </div>
                             <div class="flex gap-3 flex-wrap">
                                 <input class="border rounded border-black px-3 focus:outline-none py-3 pl-3"  id="npm-id" name="npm" type="text" v-model="bornPlace" placeholder="Masukkan Tempat Lahir"/>
-                                <input class="border rounded border-black px-3 focus:outline-none py-3 pl-3"  id="npm-id" name="npm" type="date" v-model="bornAt" placeholder="Masukkan Tanggal Lahir"/>
+                                <datepicker class="border rounded border-black px-3 focus:outline-none py-3 pl-3"  v-model="bornAt" />
                             </div>
                         </div>
                     </div>
@@ -123,7 +123,7 @@
                                 <label for="npm-id">Nama Instansi</label>
                             </div>
                             <div>
-                                <input class="border w-full rounded border-black px-3 focus:outline-none py-3 pl-3"  id="npm-id" name="npm" type="text" v-model="instance" placeholder="Masukkan Nama Instansi"/>
+                                <input class="border w-full rounded border-black px-3 focus:outline-none py-3 pl-3"  id="instance-id" name="instance" type="text" v-model="instance" placeholder="Masukkan Nama Instansi"/>
                             </div>
                         </div>
                     </div>
@@ -134,7 +134,7 @@
                                 <label for="npm-id">Telp</label>
                             </div>
                             <div>
-                                <input class="border w-full rounded border-black px-3 focus:outline-none py-3 pl-3"  id="npm-id" name="npm" type="text" v-model="npm" placeholder="Masukkan Npm"/>
+                                <input class="border w-full rounded border-black px-3 focus:outline-none py-3 pl-3"  id="nomor-id" name="nomor" type="text" v-model="nomor" placeholder="Masukkan Npm"/>
                             </div>
                         </div>
                     </div>
@@ -142,16 +142,16 @@
                 <div class="grid grid-cols-1 gap-5 col-span-2 md:col-span-1">
                     <h2 class="font-bold mt-5 md:mt-0">Data Magang</h2>
                     <SelectInput v-model="ptnType" label="Jenis Magang" :disabled="false" :data="[{label : 'test',value:'test'}]"/>                          
-                    <SelectInput v-model="ptnType" label="Program Magang" :disabled="false" :data="[{label : 'test',value:'test'}]"/>                          
-                    <SelectInput v-model="ptnType" label="Bulan Pelaksanaan" :disabled="false" :data="[{label : 'test',value:'test'}]"/>                          
-                    <SelectInput v-model="ptnType" label="Durasi Magang" :disabled="false" :data="[{label : 'test',value:'test'}]"/>                          
+                    <SelectInput v-model="magangProgram" label="Program Magang" :disabled="false" :data="[{label : 'test',value:'test'}]"/>                          
+                    <SelectInput v-model="commitAt" label="Bulan Pelaksanaan" :disabled="false" :data="[{label : 'test',value:'test'}]"/>                          
+                    <SelectInput v-model="duration" label="Durasi Magang" :disabled="false" :data="[{label : 'test',value:'test'}]"/>                          
                     <div class="col-span-2 md:col-span-1">
                         <div class="flex flex-col gap-3 ">
                             <div class="font-semibold">
                                 <label for="nama-id">Alamat Domisili</label>
                             </div>
                             <div>
-                                <input class="border w-full rounded border-black px-3 focus:outline-none py-3 pl-3"  id="nama-id" name="nama" type="text" v-model="nama" placeholder="Masukkan Nama"/>
+                                <input class="border w-full rounded border-black px-3 focus:outline-none py-3 pl-3"  id="domisili-id" name="domisili" type="text" v-model="domisili" placeholder="Masukkan Domisili"/>
                             </div>
                         </div>
                     </div>
@@ -161,7 +161,7 @@
                                 <label for="nama-id">Nama Ortu</label>
                             </div>
                             <div>
-                                <input class="border w-full rounded border-black px-3 focus:outline-none py-3 pl-3"  id="nama-id" name="nama" type="text" v-model="nama" placeholder="Masukkan Nama"/>
+                                <input class="border w-full rounded border-black px-3 focus:outline-none py-3 pl-3"  id="namaOrtu-id" name="namaOrtu" type="text" v-model="namaOrtu" placeholder="Masukkan Nama Orang Tua"/>
                             </div>
                         </div>
                     </div>
@@ -171,7 +171,7 @@
                                 <label for="nama-id">Pekerjaan Ortu</label>
                             </div>
                             <div>
-                                <input class="border w-full rounded border-black px-3 focus:outline-none py-3 pl-3"  id="nama-id" name="nama" type="text" v-model="nama" placeholder="Masukkan Nama"/>
+                                <input class="border w-full rounded border-black px-3 focus:outline-none py-3 pl-3"  id="pekerjaanOrtu-id" name="pekerjaanOrtu" type="text" v-model="pekerjaanOrtu" placeholder="Masukkan Pekerjaan Orang Tua"/>
                             </div>
                         </div>
                     </div>
@@ -182,40 +182,6 @@
             <div class="flex justify-center gap-3 mt-8">
                 <button type='submit' class="border rounded-full bg-[#BFBDBD] hover:bg-[#898787] text-white px-5 py-3">Batal</button>
                 <button type='submit' class="border rounded-full bg-[#60A7DB] hover:bg-[#5696c4] text-white px-5 py-3">Simpan</button>
-            </div>
-        </form>
-    </div>
-    <div class="backdrop-brightness-50 w-full h-screen left-0 right-0 top-0 flex justify-center items-center" :class="(editState) ? 'absolute z-50' : 'hidden'" @keydown.esc="editState = false">
-        <form @submit.prevent="handleSubmit" class="bg-white border-[15px] border-white rounded-2xl w-4/5 md:w-2/5 p-14">
-            <div class="text-2xl font-medium text-center flex justify-center">
-                <div class="border-b-2 border-black pb-3 px-9">
-                    Edit Peserta
-                </div>
-            </div>
-            <div class="mt-10 flex flex-col gap-9">
-                <div>
-                    <div class="flex flex-col gap-3">
-                        <div class="font-semibold">
-                            <label for="npm-id">Npm</label>
-                        </div>
-                        <div>
-                            <input class="border w-full rounded border-black px-3 focus:outline-none py-3 pl-3"  id="npm-id" name="npm" type="text" v-model="npm" placeholder="Masukkan Npm"/>
-                        </div>
-                    </div>
-                </div>
-                <div>
-                    <div class="flex flex-col gap-3">
-                        <div class="font-semibold">
-                            <label for="nama-id">Nama</label>
-                        </div>
-                        <div>
-                            <input class="border w-full rounded border-black px-3 focus:outline-none py-3 pl-3"  id="nama-id" name="nama" type="text" v-model="nama" placeholder="Masukkan Nama"/>
-                        </div>
-                    </div>
-                </div>
-                <div class="flex justify-center gap-3 mt-8">
-                    <button type='submit' class="border rounded-full bg-[#60A7DB] hover:bg-[#5696c4] text-white px-5 py-3">Update</button>
-                </div>
             </div>
         </form>
     </div>
@@ -259,6 +225,8 @@ import {ref, defineAsyncComponent} from 'vue'
 import {PesertaIndex} from './../../../stores/Peserta.js'
 import Escapable from './../partials/Escapable.js'
 import SelectInput from './partials/SelectInput.vue'
+import datepicker from 'vue3-datepicker'
+
 
 
 const label = [
@@ -320,15 +288,14 @@ export default {
         PesertaIndex: {
             deep: true,
             handler(newValue, oldValue) {
-                console.log(oldValue)
-                console.log(oldValue)
-                console.log("Manipulate new and old value here")
+
             }
         }
     },
     // mixins: [Escapable],
     components: {
-    SelectInput
+    SelectInput,
+    datepicker
 },
     setup: () => {
         return {
@@ -362,7 +329,10 @@ export default {
             namaOrtu: '',
             pekerjaanOrtu: '',
             division: '',
+            ptnType: '',
             dataEdit: null,
+            picked: new Date()
+
         }
     },
     name: 'PesertaComponents',
@@ -375,7 +345,7 @@ export default {
         }
     },
     methods: {
-        escHandling() {
+        outsideClicked() {
             // this.createState = false
             console.log('msk')
         },

@@ -13,26 +13,27 @@
         </div>
         <div class="flex justify-center flex-col items-center">
             <Time />
-            <form v-on:submit.prevent="submitHandling" method="post"></form>
-            <div class="w-4/5 md:w-2/4 grid grid-flow-row gap-5 mb-44 mt-10">
-                <inputText v-model="npm" label="Nomor Peserta Magang" :disabled="false"/>
-                <inputText v-model="nama" label="Nama Peserta Magang" :disabled="false"/>
-                <selectCheck v-model="magangType" label="Jenis Program Magang" :disabled="false" :data="[{label : 'test',value:'test'}]"/>
-                <selectCheck v-model="absensiType" label="Jenis Absensi" :disabled="false" :data="[{label : 'test',value:'test'}]"/>
-                <selectCheck v-model="unitKerja" label="Unit Kerja Magang" :disabled="false" :data="[{label : 'test',value:'test'}]"/>
-                <div style="positon:relative; height:600px; width:100%" :val="latitude">
-                    <l-map ref="map" v-model:zoom="zoom" v-model:center="getLocation" :use-global-leaflet="false">
-                        <l-tile-layer
-                          url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-                          layer-type="base"
-                          name="OpenStreetMap"
-                        ></l-tile-layer>
-                    </l-map>
+            <form v-on:submit.prevent="submitHandling" method="post">
+                <div class="w-4/5 md:w-2/4 grid grid-flow-row gap-5 mb-44 mt-10">
+                    <inputText v-model="npm" label="Nomor Peserta Magang" :disabled="false"/>
+                    <inputText v-model="nama" label="Nama Peserta Magang" :disabled="false"/>
+                    <selectCheck v-model="magangType" label="Jenis Program Magang" :disabled="false" :data="[{label : 'test',value:'test'}]"/>
+                    <selectCheck v-model="absensiType" label="Jenis Absensi" :disabled="false" :data="[{label : 'test',value:'test'}]"/>
+                    <selectCheck v-model="unitKerja" label="Unit Kerja Magang" :disabled="false" :data="[{label : 'test',value:'test'}]"/>
+                    <div style="positon:relative; height:600px; width:100%" :val="latitude">
+                        <l-map ref="map" v-model:zoom="zoom" v-model:center="getLocation" :use-global-leaflet="false">
+                            <l-tile-layer
+                              url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+                              layer-type="base"
+                              name="OpenStreetMap"
+                            ></l-tile-layer>
+                        </l-map>
+                    </div>
+                    <div class="flex justify-center">
+                        <button class="px-5 py-3 outline outline-white rounded-3xl text-white bg-transparent mt-8">Submit</button>
+                    </div>
                 </div>
-                <div class="flex justify-center">
-                    <button class="px-5 py-3 outline outline-white rounded-3xl text-white bg-transparent mt-8">Submit</button>
-                </div>
-            </div>
+            </form>
             <!-- <Forms /> -->
         </div>
     </main>
@@ -44,14 +45,14 @@ import Time from './partials/Time.vue'
 import inputText from './partials/inputText.vue';
 import selectCheck from './partials/selectCheck.vue';
 import { LMap, LTileLayer, LIcon, LLayerGroup, LMarker } from "@vue-leaflet/vue-leaflet";
-let latitude = null;
-let longitude = null;
+let latitude = ref(null);
+let longitude = ref(null);
 
 let center;
 if (navigator.geolocation) {
     navigator.geolocation.getCurrentPosition(function(position) {
-        const latitude = position.coords.latitude;
-        const longitude = position.coords.longitude;
+        latitude = position.coords.latitude;
+        longitude = position.coords.longitude;
         console.log(`Latitude: ${latitude}, Longitude: ${longitude}`);
     });
 } else {

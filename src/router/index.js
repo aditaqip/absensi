@@ -13,6 +13,7 @@ import Reporting from './../views/Reporting.vue';
 import HomeDashboard from './../views/HomeDashboard.vue';
 import KelolaUnit from "./../views/KelolaUnit.vue";
 import notFound from "./../views/notFound.vue";
+import { useAuthStores } from '../auth.';
 
 
 const router = createRouter({
@@ -138,7 +139,7 @@ const router = createRouter({
   ]
 })
 
-router.beforeEach(async (to, from, next) => {
+router.beforeEach(async (to, from) => {
   // clear alert on route change
   document.title = `${to.meta.title}`;
 
@@ -146,8 +147,16 @@ router.beforeEach(async (to, from, next) => {
   // if (typeof localStorage.getItem('token') == 'undefined') {
   //     return '/login';
   // }
+  const loginStore = useAuthStores()
+  const publicPages = ['/', '/login', '/check-in', '/check-out'] 
+  const authRequired = !publicPages.includes(to.path)
 
-  next()
+  if( authRequired && !loginStore.isLogin ) {
+    loginStore.returnUrl = to.fullPath 
+    // console.log(loginStore.returnUrl)
+    return '/login' 
+  }
+
 });
 
 export default router

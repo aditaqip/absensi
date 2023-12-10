@@ -1,5 +1,5 @@
 <template>
-    <div :class={Hidden ? 'hidden' : ''}>
+    <div :class={{Hidden ? hidden : ''}}>
         <div class="flex flex-wrap justify-start gap-3">
             <div class="w-full">
                 <label :for={Name}>{title}</label>

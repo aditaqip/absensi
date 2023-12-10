@@ -12,7 +12,7 @@
                     </div>
                 </div>
                 <div class="w-3/5 text-right pr-6 py-6">
-                    <h4 class="text-5xl font-semibold">250</h4>
+                    <h4 class="text-5xl font-semibold">{{DataPesertaIndex}}</h4>
                     <span class="text-sm">Total Peserta Magang</span>
                 </div>
                 <router-link to="/dashboard/total-peserta"  class="w-full border-t-2 text-center py-3 set">
@@ -65,10 +65,12 @@
     </div>
 </template>
 <script>
+import axios from 'axios';
+import './../../../axioslogged'
 import { ref } from 'vue';
-import { routerKey } from 'vue-router';
+// import {DataPesertaIndex} from './../../../stores/DataPeserta'
 
-console.log(routerKey)
+const DataPesertaIndex = ref(0)
 
 const stateIndex = ref(0)
 export default {
@@ -77,6 +79,18 @@ export default {
             stateIndex
         }
     },
+    setup() {
+        return {
+            DataPesertaIndex
+        };
+    },
+    mounted() {
+        axios.get('peserta').then((e) => {
+            this.DataPesertaIndex = e.data.length
+        }).catch(error => {
+            this.$router.push('/404')
+        })
+    }
 }
 </script>
 <style>

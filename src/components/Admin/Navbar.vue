@@ -9,7 +9,7 @@
                       </svg>
                 </div>
             </div>
-            <div class="flex items-center gap-2">
+            <div class="flex items-center gap-2 cursor-pointer" v-on:click="logoutModal = !logoutModal">
                 <div>
                     <svg xmlns="http://www.w3.org/2000/svg" width="39" height="39" viewBox="0 0 39 39" fill="none">
                         <g clip-path="url(#clip0_1404_1368)">
@@ -23,13 +23,37 @@
                         </defs>
                       </svg>
                 </div>
-                <div>Admin PT ASDP</div>
+                <div class="relative">
+                  <div>
+                    {{loginStore.getUserInfos()}}
+                  </div>
+                  <div class="absolute top-[150%] right-0 bg-white p-3 w-full cursor-pointer" v-on:click="loginStore.logout" :class="!logoutModal && 'hidden'">
+                    Logout
+                  </div>
+                </div>
             </div>
         </div>
     </div>
 </template>
 <script>
+import { ref } from 'vue';
+import { useAuthStores } from '../../auth.';
+
+const logoutModal = ref(false)
+
 export default {
-    name: 'navbar'
+    name: 'navbar',
+    setup() {
+        const loginStore = useAuthStores()
+        return {
+            loginStore,
+        }
+    },
+    data: ()=> {
+      return {
+        logoutModal
+
+      }
+    }
 }
 </script>

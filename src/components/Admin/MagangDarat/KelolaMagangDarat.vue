@@ -5,14 +5,14 @@
                 <div class="lg:w-full px-5 py-3 rounded-lg block md:block bg-white relative overflow-x-auto">
                     <h1 class="text-xl py-2">Data Peserta Magang Darat</h1>
                     <hr />
-                    <div class="flex justify-between items-center flex-wrap mt-2">
+                    <div class="flex justify-between items-center flex-wrap my-8">
                         <div>Show <input type="number" class="mx-3 pl-5 w-16 h-6 border border-black rounded-lg" :value="dataMounted" />Data</div>
                     </div>
-                    <table class="w-full">
+                    <table class="w-full table whitespace-nowrap">
                         <thead class="w-3/5 font-thin">
                             <tr class="border-b-[1px]">
                                 <th class="py-2">No</th>
-                                <th class="py-2"  v-for="head in label">{{head.name}}</th>
+                                <th class="px-4 py-1"  v-for="head in label">{{head.name}}</th>
                                 <th class="py-2 w-20"></th>
                             </tr>
                         </thead>

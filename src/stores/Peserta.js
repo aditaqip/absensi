@@ -1,4 +1,3 @@
-
 const PesertaIndex = [
     {
         'ID' : 1,
@@ -18,7 +17,7 @@ const PesertaIndex = [
     },
     {
         'ID' : 1,
-        'name' : 'Fianna',
+        'name' : 'Bayu',
         'Npm' : '3232412',
         'NIK' : '32139182472737',
         'tglahir' : 'Bekasi, 24 Juni 2000',
@@ -34,7 +33,7 @@ const PesertaIndex = [
     },
     {
         'ID' : 1,
-        'name' : 'Fianna',
+        'name' : 'Dianan',
         'Npm' : '3232412',
         'NIK' : '32139182472737',
         'tglahir' : 'Bekasi, 24 Juni 2000',

@@ -15,8 +15,8 @@
                 <div :class="stateViewChart && 'hidden'">
                     <MinugganViewChart />
                 </div>
-                <div :class="stateViewChart ? 'opacity-0' : 'opacity-100'">
-                    <div style="positon:relative; height:600px; width:100%" class="mx-auto max-w-screen-lg w-full z-10 relative">
+                <div :class="!stateViewChart ? 'opacity-0' : 'opacity-100'">
+                    <div id="map" style="positon:relative; height:600px; width:100%" class="mx-auto max-w-screen-lg w-full">
                         <l-map ref="map" v-model:zoom="zoom" :center="[-1.200000, 113.816666]" :use-global-leaflet="false">
                             <l-tile-layer
                               url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"

@@ -15,6 +15,22 @@ import navbar from './Navbar.vue';
 
 const i = 0
 
+function getCookie(cname) {
+  let name = cname + "=";
+  let decodedCookie = decodeURIComponent(document.cookie);
+  let ca = decodedCookie.split(';');
+  for(let i = 0; i <ca.length; i++) {
+    let c = ca[i];
+    while (c.charAt(0) == ' ') {
+      c = c.substring(1);
+    }
+    if (c.indexOf(name) == 0) {
+      return c.substring(name.length, c.length);
+    }
+  }
+  return "";
+}
+
 // console.log(this.datas)
 export default {
     name: 'Main',
@@ -22,14 +38,6 @@ export default {
         SidebarMenu,
         navbar
     },
-    created(){
-        if (typeof localStorage.getItem('token') == 'undefined') {
-            this.$router.push('/login')
-        }
-        if (localStorage.getItem('token') != 123456) {
-            this.$router.push('/login')
-        }
-    }
 }
 </script>
 <style lang="">
