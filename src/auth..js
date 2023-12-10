@@ -22,7 +22,6 @@ export const useAuthStores = defineStore('auth', {
                 this.isLoginLoading = true
                 return e
             }).then((e) => {
-                console.log(e)
                 if (e.status == 200) {
                     this.isLogin = true
                     // this.userInfo = e.data.
@@ -45,7 +44,7 @@ export const useAuthStores = defineStore('auth', {
             }
         },
         logout() {
-            this.user = null;
+            this.userInfo = null;
             localStorage.removeItem('user');
             router.push('/login');
         },
@@ -73,11 +72,8 @@ export const useAuthStores = defineStore('auth', {
                     
                 })
             }catch{
-                
+                router.push('/login');
             }
-            
-
-            
         },
         getUserInfos() {
             if (typeof localStorage.getItem('user') == 'undefined') {

@@ -88,7 +88,7 @@ export default {
         axios.get('peserta').then((e) => {
             this.DataPesertaIndex = e.data.length
         }).catch(error => {
-            this.$router.push('/404')
+            // this.$router.push('/404')
         })
     }
 }
