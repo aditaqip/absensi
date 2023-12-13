@@ -38,10 +38,11 @@ import { LMap, LTileLayer } from "@vue-leaflet/vue-leaflet";
 
 
 
-
+const Peserta = ref(0)
 const stateViewChart = ref(true)
 
 export default {
+   
     name: 'HomeDashboard',
     components: { 
         BulananViewChart, 
@@ -55,9 +56,7 @@ export default {
             zoom:5
         }
     },
-    methods: {
-
-    }
+   
 }
 </script>
 <style lang="">

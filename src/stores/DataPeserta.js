@@ -1,10 +1,8 @@
 import './../axioslogged'
 import axios from 'axios'
-const DataPesertaIndex = await axios.get('peserta').then((e) => {
-    return e.data.length
-}).catch(error => {
-
-})
+const DataPesertaIndex = axios.get('/data-peserta').then(e => {
+    return e.data
+}).catch(e => console.log(e));
 
 export {
     DataPesertaIndex,

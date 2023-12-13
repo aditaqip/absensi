@@ -14,7 +14,7 @@
                 <path d="M1.75 1.625L5.5 5.375L9.25 1.625" stroke="black" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
             </svg>
         </div> -->
-        <v-select  :name="name" :id="name + '-id'" :required="required" :disabled="disabled" :placeholder="'Masukkan ' + label" :value="modelValue"  @input="$emit('update:modelValue', $event.target.value)"  id="magang-id" class="select w-full cico-select rounded-xl"></v-select>
+        <v-select  :name="name" :options="options" :id="name + '-id'" :required="required" :disabled="disabled" :placeholder="'Masukkan ' + label" :value="modelValue" @selected="$emit('update:modelValue', $event.target.value)" class="select w-full cico-select rounded-xl"></v-select>
 
     </div>
 </template>
@@ -22,7 +22,6 @@
 import { ref } from 'vue';
 import vSelect from 'vue-select'
 import 'vue-select/dist/vue-select.css';
-
 
 
 let rotate = false
@@ -40,15 +39,10 @@ export default {
         placeholder:String,
         name:String,
         disabled:Boolean,
-        data: Array
+        data: Array,
+        options: Array
     }   ,
     name:'selectCheck',
-    methods: {
-        changeRotate(data){
-            if (data) this.rotate = false
-            else this.rotate = true
-        }
-    },
     components: {
         vSelect
     }

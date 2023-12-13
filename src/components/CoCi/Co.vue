@@ -13,17 +13,18 @@
         </div>
         <div class="flex justify-center flex-col items-center">
             <Time />
-            <form v-on:submit.prevent="submitHandling" method="post"></form>
-            <div class="w-4/5 md:w-2/4 grid grid-flow-row gap-5 mb-44 mt-10">
-                <inputText v-model="npm" label="Nomor Peserta Magang" :disabled="false"/>
-                <inputText v-model="nama" label="Nama Peserta Magang" :disabled="false"/>
-                <selectCheck v-model="magangType" label="Jenis Program Magang" :disabled="false" :data="[{label : 'test',value:'test'}]"/>
-                <selectCheck v-model="absensiType" label="Jenis Absensi" :disabled="false" :data="[{label : 'test',value:'test'}]"/>
-                <selectCheck v-model="unitKerja" label="Unit Kerja Magang" :disabled="false" :data="[{label : 'test',value:'test'}]"/>
-                <div class="flex justify-center">
-                    <button class="px-5 py-3 outline outline-white rounded-3xl text-white bg-transparent mt-8">Submit</button>
+            <form v-on:submit.prevent="submitHandling" method="post" class="flex justify-center">
+                <div class="w-4/5 md:w-2/4 grid grid-flow-row gap-5 mb-44 mt-10 justify-items-center">
+                    <inputText v-model="npm" label="Nomor Peserta Magang" :disabled="false"/>
+                    <inputText v-model="nama" label="Nama Peserta Magang" :disabled="false"/>
+                    <selectCheck v-model="magangType" label="Jenis Program Magang" :disabled="false" :data="[{label : 'test',value:'test'}]"/>
+                    <selectCheck v-model="absensiType" label="Jenis Absensi" :disabled="false" :data="[{label : 'test',value:'test'}]"/>
+                    <selectCheck v-model="unitKerja" label="Unit Kerja Magang" :disabled="false" :data="[{label : 'test',value:'test'}]"/>
+                    <div class="flex justify-center">
+                        <button class="px-5 py-3 outline outline-white rounded-3xl text-white bg-transparent mt-8">Submit</button>
+                    </div>
                 </div>
-            </div>
+            </form>
             <!-- <Forms /> -->
         </div>
     </main>

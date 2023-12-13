@@ -13,8 +13,8 @@
         </div>
         <div class="flex justify-center flex-col items-center">
             <Time />
-            <form v-on:submit.prevent="submitHandling" method="post">
-                <div class="w-4/5 md:w-2/4 grid grid-flow-row gap-5 mb-44 mt-10">
+            <form v-on:submit.prevent="submitHandling" method="post" class="flex justify-center">
+                <div class="w-4/5 md:w-2/4 grid grid-flow-row gap-5 mb-44 mt-10 justify-items-center">
                     <inputText v-model="npm" label="Nomor Peserta Magang" :disabled="false"/>
                     <inputText v-model="nama" label="Nama Peserta Magang" :disabled="false"/>
                     <selectCheck v-model="magangType" label="Jenis Program Magang" :disabled="false" :data="[{label : 'test',value:'test'}]"/>
@@ -103,7 +103,7 @@ export default {
             }
             return day
         },
-        async getLocation(){
+        getLocation(){
             if (navigator.geolocation) {
                 navigator.geolocation.getCurrentPosition(function(position) {
                     const latitude = position.coords.latitude;

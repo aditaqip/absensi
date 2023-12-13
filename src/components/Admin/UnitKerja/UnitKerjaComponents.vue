@@ -16,7 +16,7 @@
                             </span>
                             <span>Tambah Unit Kerja</span>
                         </button>
-                        <div>Show <input type="number" class="ml-3 pl-5 w-16 h-6 border border-black rounded-lg" /></div>
+                        <div>Show <input v-model="size" type="number" class="ml-3 pl-5 w-16 h-6 border border-black rounded-lg" /></div>
                     </div>
                     <table class="w-full">
                         <thead class="w-3/5 font-thin">
@@ -32,12 +32,12 @@
                         <tbody v-if="(typeof UnitKerjaIndex != 'undefined')">
                             <tr v-for="(index, items) in UnitKerjaIndex">
                                 <td class="text-center py-2">{{++items}}</td>
-                                <td class="text-center py-2">{{index.Division}}</td>
+                                <td class="text-center py-2">{{index.namadivisi}}</td>
                                 <td class="flex py-2 justify-center items-center w-32 gap-2">
-                                    <a class="w-1/2 flex justify-center cursor-pointer rounded bg-[#0D6EFD] text-white py-1 px-5" href="#" v-on:click="editState = !editState; getId=index.ID;  data_update = index; getUpdated(data_update)">
+                                    <a class="w-1/2 flex justify-center cursor-pointer rounded bg-[#0D6EFD] text-white py-1 px-5" href="#" v-on:click="editState = !editState; getId=index.iddivisi;  data_update = index; getUpdated(data_update)">
                                         Edit
                                     </a>
-                                    <a class="w-1/2 flex justify-center cursor-pointer rounded bg-[#DC3545] text-white py-1 px-5" v-on:click="deleteState = !deleteState; getId=index.ID;  data_update = index; getUpdated(data_update)">
+                                    <a class="w-1/2 flex justify-center cursor-pointer rounded bg-[#DC3545] text-white py-1 px-5" v-on:click="deleteState = !deleteState; getId=index.iddivisi;  data_update = index; getUpdated(data_update)">
                                        Delete
                                     </a>
                                 </td>
@@ -48,7 +48,7 @@
             </div>
         </div>
     </div>
-    <div class="backdrop-brightness-50 w-full h-screen left-0 right-0 top-0 flex justify-center items-center" :class="(createState) ? 'absolute z-50' : 'hidden'">
+    <div class="backdrop-brightness-50 w-full h-screen left-0 right-0 top-0 flex justify-center items-center" :class="(createState) ? 'absolute z-50' : 'hidden'"  @click.self="createState=false">
         <form @keydown.esc="createState = false" @submit.prevent="handleSubmit" class="bg-white border-[15px] border-white rounded-2xl  w-4/5 md:w-2/5 md:p-14 p-3">
             <div class="text-2xl font-medium text-center flex justify-center">
                 <div class="border-b-2 border-black pb-3 px-9">
@@ -72,7 +72,7 @@
             </div>
         </form>
     </div>
-    <div class="backdrop-brightness-50 w-full h-screen left-0 right-0 top-0 flex justify-center items-center" :class="(editState) ? 'absolute z-50' : 'hidden'">
+    <div class="backdrop-brightness-50 w-full h-screen left-0 right-0 top-0 flex justify-center items-center" :class="(editState) ? 'absolute z-50' : 'hidden'" @click.self="editState=false">
         <form @keydown.esc="editState = false" @submit.prevent="edited(getId)" class="bg-white border-[15px] border-white rounded-2xl  w-4/5 md:w-2/5 md:p-14 p-3">
             <div class="text-2xl font-medium text-center flex justify-center">
                 <div class="border-b-2 border-black pb-3 px-9">
@@ -96,7 +96,7 @@
             </div>
         </form>
     </div>
-    <div class="backdrop-brightness-50 w-full h-screen left-0 right-0 top-0 flex justify-center items-center" :class="(deleteState) ? 'absolute z-50' : 'hidden'">
+    <div class="backdrop-brightness-50 w-full h-screen left-0 right-0 top-0 flex justify-center items-center" :class="(deleteState) ? 'absolute z-50' : 'hidden'" @click.self="deleteState=false">
         <form @keydown.esc="deleteState = false" @submit.prevent="deleted(getId)" class="bg-white border-[15px] border-white rounded-2xl  w-4/5 md:w-2/5 md:p-14 p-3">
             <div class="text-2xl font-medium text-center flex justify-center">
                 <div class="border-b-2 border-black pb-3 px-9">
@@ -124,7 +124,7 @@
 
 <script>
 import {ref, defineAsyncComponent} from 'vue'
-import {UnitKerjaIndex} from '../../../stores/UnitKerja.js'
+import axios from 'axios'
 
 
 
@@ -143,11 +143,25 @@ const deleteState = ref(false)
 const getId = ref(null)
 
 const data_update = ref(null)
+const nameRef = ref(false)
+const UnitKerjaIndex = ref(false)
+
 
 let i = 1
 
 const data_effect = ref(UnitKerjaIndex)
 export default {
+    created() {
+        this.$watch(
+            () => this.$route.params,
+            () => {
+                this.getDataUnitKerja(this.size)
+            },
+            // fetch the data when the view is created and the data is
+            // already being observed
+            { immediate: true }
+        )
+    },
     components: {
     },
     setup: () => {
@@ -157,7 +171,8 @@ export default {
             i,
             createState,
             editState,
-            deleteState
+            deleteState,
+            size: 5,
         }
     },
     data() {
@@ -167,35 +182,40 @@ export default {
     },
     name: 'UnitKerjaComponents',
     methods: {
-        escHandling() {
-            // this.createState = false
-            console.log('msk')
-        },
-        handleSubmit(e){
-            const { [Object.keys(UnitKerjaIndex).pop()]: lastItem } = UnitKerjaIndex;
-                const newID = parseInt(lastItem.ID)
+        async handleSubmit(e){
+            nameRef.value = (this.nama != '') ? false : true
 
-                UnitKerjaIndex.push({
-                    Division: this.nama,
-                    ID: newID + 1
-                });
-                this.nama = ''
-                createState.value = false
+            if(nameRef.value) return false
+            await axios.post('/unitkerja', {
+                nama: this.nama
+            }).then(e=> {
+                this.getDataUnitKerja(this.size)
+                console.log(e)
+            }).catch(e=> console.log(e));
         },
-        deleted(id) {
-            UnitKerjaIndex.splice(UnitKerjaIndex.findIndex(a => a.ID === id) , 1)
-            getId.value = null
-            deleteState.value = false
+        async deleted(id) {
+            await axios.delete('/unitkerja/'+id).then(e => {
+                this.getDataUnitKerja(this.size)
+            }).catch(e => console.log(e));
         },
         getUpdated(data){
-            this.nama = data.Division
+            this.nama = data.namadivisi
         },
-        edited(id){
-            let no = UnitKerjaIndex.findIndex(a => a.ID === id)
-            UnitKerjaIndex[no].Division = this.nama
-            this.nama = ''
-            editState.value = false
-        }
+        async edited(id){
+           if (this.nama == '') return false
+
+            await axios.put('/unitkerja/' + id, {
+                nama: this.nama
+            }).then(e=> {
+                this.getDataUnitKerja(this.size)
+            }).catch(e=> console.log(e));
+        },
+        async getDataUnitKerja(size = 10, page = 0) {
+            await axios.get('/unitkerja?size=' + size + '&page=' + page).then(e => {
+               this.UnitKerjaIndex = e.data.content
+               console.log(this.UnitKerjaIndex)
+            }).catch(e => console.log(e));
+        },
     }
 
    

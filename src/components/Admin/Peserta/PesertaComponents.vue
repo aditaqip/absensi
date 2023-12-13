@@ -30,21 +30,21 @@
                             <td colSpan="99" class="text-center h-20 bg-slate-100">No Data</td>
                         </tbody>
                         <tbody v-if="(typeof PesertaIndex != 'undefined')">
-                            <tr v-for="(index, items) in PesertaIndex">
+                            <tr v-for="(index, items) in datas.value">
                                 <td class="text-center py-2 p-3">{{++items}}</td>
-                                <td class="text-center py-2 p-3">{{index.Npm}}</td>
-                                <td class="text-center py-2 p-3">{{index.name}}</td>
-                                <td class="text-center py-2 p-3">{{index.NIK}}</td>
-                                <td class="text-center py-2 p-3">{{index.tglahir}}</td>
-                                <td class="text-center py-2 p-3">{{(index.gender == "L") ? 'Laki-Laki' : 'Perempuan'}}</td>
-                                <td class="text-center py-2 p-3">{{index.type}}</td>
-                                <td class="text-center py-2 p-3">{{index.instance}}</td>
-                                <td class="text-center py-2 p-3">{{index.pddk}}</td>
+                                <td class="text-center py-2 p-3">{{index.npm}}</td>
+                                <td class="text-center py-2 p-3">{{index.namalengkap}}</td>
+                                <td class="text-center py-2 p-3">{{index.nik}}</td>
+                                <td class="text-center py-2 p-3">{{index.ttl}}</td>
+                                <td class="text-center py-2 p-3">{{index.jeniskelamin}}</td>
+                                <td class="text-center py-2 p-3">{{index.jenismagang}}</td>
+                                <td class="text-center py-2 p-3">{{index.namainstansi}}</td>
+                                <td class="text-center py-2 p-3">{{index.jenjangpendidikan}}</td>
                                 <td class="text-center py-2 p-3">{{index.jurusan}}</td>
-                                <td class="text-center py-2 p-3">{{index.Telp}}</td>
-                                <td class="text-center py-2 p-3">{{index.alamatDomisili}}</td>
-                                <td class="text-center py-2 p-3">{{index.parentName}}</td>
-                                <td class="text-center py-2 p-3">{{index.parentJob}}</td>
+                                <td class="text-center py-2 p-3">{{index.notelp}}</td>
+                                <td class="text-center py-2 p-3">{{index.alamat}}</td>
+                                <td class="text-center py-2 p-3">{{index.namaortu}}</td>
+                                <td class="text-center py-2 p-3">{{index.pekerjaanortu}}</td>
                                 <!-- <td class="flex py-2 justify-center items-center w-32 gap-2">
                                     <a class="w-1/2 flex justify-center cursor-pointer rounded bg-[#0D6EFD] text-white py-1 px-5" href="#" v-on:click="editState = !editState; getId=index.ID;  data_update = index; getUpdated(data_update)">
                                         Edit
@@ -76,7 +76,7 @@
                                 <label for="npm-id">Nama Lengkap</label>
                             </div>
                             <div>
-                                <input class="border w-full rounded border-black px-3 focus:outline-none py-3 pl-3"  id="npm-id" name="npm" type="text" v-model="nama" placeholder="Masukkan Nama Lengkap"/>
+                                <input class="border w-full rounded border-black px-3 focus:outline-none py-3 pl-3"  id="nama-id" name="nama" type="text" v-model="nama" placeholder="Masukkan Nama Lengkap"/>
                             </div>
                         </div>
                     </div>
@@ -86,7 +86,7 @@
                                 <label for="npm-id">NIK</label>
                             </div>
                             <div>
-                                <input class="border w-full rounded border-black px-3 focus:outline-none py-3 pl-3"  id="npm-id" name="npm" type="text" v-model="nik" placeholder="Masukkan NIK"/>
+                                <input class="border w-full rounded border-black px-3 focus:outline-none py-3 pl-3"  id="nik-id" name="nik" type="text" v-model="nik" placeholder="Masukkan NIK"/>
                             </div>
                         </div>
                     </div>
@@ -96,7 +96,7 @@
                                 <label for="npm-id">Tempat, tanggal lahir</label>
                             </div>
                             <div class="flex gap-3 flex-wrap">
-                                <input class="border rounded border-black px-3 focus:outline-none py-3 pl-3"  id="npm-id" name="npm" type="text" v-model="bornPlace" placeholder="Masukkan Tempat Lahir"/>
+                                <input class="border rounded border-black px-3 focus:outline-none py-3 pl-3"  id="bornPlace-id" name="bornPlace" type="text" v-model="bornPlace" placeholder="Masukkan Tempat Lahir"/>
                                 <datepicker class="border rounded border-black px-3 focus:outline-none py-3 pl-3"  v-model="bornAt" />
                             </div>
                         </div>
@@ -108,15 +108,21 @@
                             </div>
                             <div class="flex h-full items-center">
                                 <div>
-                                    <input class="border mr-2 md:mr-4 p-4 inline rounded border-black px-3 focus:outline-none"  id="npm-id" name="npm" type="radio" v-model="genders" placeholder="Masukkan Npm" value="Laki Laki"/>Laki - Laki
+                                    <input class="border mr-2 md:mr-4 p-4 inline rounded border-black px-3 focus:outline-none"  id="genders-id" name="genders" type="radio" v-model="genders" value="Laki Laki"/>Laki - Laki
                                 </div>
                                 <div>
-                                    <input class="border mr-2 md:mr-4 ml-3 p-4 inline rounded border-black px-3 focus:outline-none"  id="npm-id" name="npm" type="radio" v-model="genders" placeholder="Masukkan Npm" value="Perempuan"/>Perempuan
+                                    <input class="border mr-2 md:mr-4 ml-3 p-4 inline rounded border-black px-3 focus:outline-none"  id="genders-id" name="genders" type="radio" v-model="genders" value="Perempuan"/>Perempuan
                                 </div>
                             </div>
                         </div>
                     </div>
-                    <SelectInput v-model="ptnType" label="PTN/PTS" :disabled="false" :data="[{label : 'test',value:'test'}]"/>                          
+
+                    <div class="flex flex-col gap-3 w-full relative col-span-2 md:col-span-1">
+                        <div>
+                            <label class="font-semibold" for="ptnType-id'">PTN/PTS</label>
+                        </div>
+                        <v-select v-model="ptnType" name="ptnTpe" :options="['test 1', 'test 2']" id="ptnType-id'" :required="true" :disabled="false" placeholder="'Masukkan PTN/PTS'" class="select w-full cico-select rounded-xl"></v-select>
+                    </div>
                     <div class="col-span-2 md:col-span-1">
                         <div class="flex flex-col gap-3">
                             <div class="font-semibold">
@@ -127,7 +133,18 @@
                             </div>
                         </div>
                     </div>
-                    <SelectInput v-model="ptnType" label="Jenjang Pendidikan" :disabled="false" :data="[{label : 'test',value:'test'}]"/>                          
+                    <div class="flex flex-col gap-3 w-full relative col-span-2 md:col-span-1">
+                        <div>
+                            <label class="font-semibold" for="pddk-id'">Jenjang Pendidikan</label>
+                        </div>
+                        <v-select v-model="pddk" name="ptnTpe" :options="['S1', 'D3', 'D1']" id="pddk-id'" :required="true" :disabled="false" placeholder="Masukkan Jenjang Pendidikan" class="select w-full cico-select rounded-xl"></v-select>
+                    </div>
+                    <div class="flex flex-col gap-3 w-full relative col-span-2 md:col-span-1">
+                        <div>
+                            <label class="font-semibold" for="jurusan-id'">Jurusan</label>
+                        </div>
+                        <v-select v-model="jurusan" name="ptnTpe" :options="['Jurusan 1', 'Jurusan 2']" id="jurusan-id'" :required="true" :disabled="false" placeholder="Masukkan Jurusan" class="select w-full cico-select rounded-xl"></v-select>
+                    </div>
                     <div class="col-span-2 md:col-span-1">
                         <div class="flex flex-col gap-3">
                             <div class="font-semibold">
@@ -141,10 +158,35 @@
                 </div>
                 <div class="grid grid-cols-1 gap-5 col-span-2 md:col-span-1">
                     <h2 class="font-bold mt-5 md:mt-0">Data Magang</h2>
-                    <SelectInput v-model="ptnType" label="Jenis Magang" :disabled="false" :data="[{label : 'test',value:'test'}]"/>                          
-                    <SelectInput v-model="magangProgram" label="Program Magang" :disabled="false" :data="[{label : 'test',value:'test'}]"/>                          
-                    <SelectInput v-model="commitAt" label="Bulan Pelaksanaan" :disabled="false" :data="[{label : 'test',value:'test'}]"/>                          
-                    <SelectInput v-model="duration" label="Durasi Magang" :disabled="false" :data="[{label : 'test',value:'test'}]"/>                          
+
+                    <div class="flex flex-col gap-3 w-full relative col-span-2 md:col-span-1">
+                        <div>
+                            <label class="font-semibold" for="magangType-id'">Jenis Magang</label>
+                        </div>
+                        <v-select v-model="magangType" name="ptnTpe" :options="['Magang Darat', 'Magang Laut']" id="magangType-id'" :required="true" :disabled="false" placeholder="Masukkan Jenis Magang" class="select w-full cico-select rounded-xl"></v-select>
+                    </div>
+
+                    <div class="flex flex-col gap-3 w-full relative col-span-2 md:col-span-1">
+                        <div>
+                            <label class="font-semibold" for="magangProgram-id'">Program Magang</label>
+                        </div>
+                        <v-select v-model="magangProgram" name="ptnTpe" :options="['Magang Darat', 'Magang Laut']" id="magangProgram-id'" :required="true" :disabled="false" placeholder="Masukkan Program Magang" class="select w-full cico-select rounded-xl"></v-select>
+                    </div>
+
+                    <div class="flex flex-col gap-3 w-full relative col-span-2 md:col-span-1">
+                        <div>
+                            <label class="font-semibold" for="commitAt-id'">Bulan Pelaksanaan</label>
+                        </div>
+                        <v-select v-model="commitAt" name="ptnTpe" :options="Bulan" id="commitAt-id'" :required="true" :disabled="false" placeholder="Masukkan Bulan Pelaksanaan" class="select w-full cico-select rounded-xl"></v-select>
+                    </div>
+
+                    <div class="flex flex-col gap-3 w-full relative col-span-2 md:col-span-1">
+                        <div>
+                            <label class="font-semibold" for="duration-id'">Durasi Magang</label>
+                        </div>
+                        <v-select v-model="duration" name="ptnTpe" :options="['1 Bulan', '2 Bulan', '3 Bulan']" id="duration-id'" :required="true" :disabled="false" placeholder="Masukkan Durasi Magang" class="select w-full cico-select rounded-xl"></v-select>
+                    </div>
+
                     <div class="col-span-2 md:col-span-1">
                         <div class="flex flex-col gap-3 ">
                             <div class="font-semibold">
@@ -175,7 +217,12 @@
                             </div>
                         </div>
                     </div>
-                    <SelectInput v-model="ptnType" label="Divisi Penempatan Magang" :disabled="false" :data="[{label : 'test',value:'test'}]"/>                          
+                    <div class="flex flex-col gap-3 w-full relative col-span-2 md:col-span-1">
+                        <div>
+                            <label class="font-semibold" for="division-id'">Divisi Penempatan Magang</label>
+                        </div>
+                        <v-select v-model="division" name="ptnTpe" :options="UnitKerjaIndex" id="division-id'" :required="true" :disabled="false" placeholder="Masukkan Divisi Penempatan Magang" class="select w-full cico-select rounded-xl"></v-select>
+                    </div>
 
                 </div>
             </div>
@@ -221,11 +268,49 @@
     </div>
 </template>
 <script>
-import {ref, defineAsyncComponent} from 'vue'
+import {ref, defineAsyncComponent, onMounted} from 'vue'
 import {PesertaIndex} from './../../../stores/Peserta.js'
-import Escapable from './../partials/Escapable.js'
-import SelectInput from './partials/SelectInput.vue'
+import vSelect from 'vue-select'
+import 'vue-select/dist/vue-select.css';
 import datepicker from 'vue3-datepicker'
+import axios from 'axios'
+
+const npmRef = ref(false)
+const namaRef = ref(false)
+const nikRef = ref(false)
+const bornPlaceRef = ref(false)
+const bornAtRef = ref(false)
+const gendersRef = ref(false)
+const instanceRef = ref(false)
+const pddkRef = ref(false)
+const jurusanRef = ref(false)
+const nomorRef = ref(false)
+const magangTypeRef = ref(false)
+const magangProgramRef = ref(false)
+const commitAtRef = ref(false)
+const durationRef = ref(false)
+const domisiliRef = ref(false)
+const namaOrtuRef = ref(false)
+const pekerjaanOrtuRef = ref(false)
+const divisionRef = ref(false)
+const ptnTypeRef = ref(false)
+
+const Bulan = [
+    {label: "Januari", code: 1},
+    {label: "Februari", code: 2},
+    {label: "Maret", code: 3},
+    {label: "April", code: 4},
+    {label: "Mei", code: 5},
+    {label: "Juni", code: 6},
+    {label: "Juli", code: 7},
+    {label: "Agustus", code: 8},
+    {label: "September", code: 9},
+    {label: "Oktober", code: 10},
+    {label: "November", code: 11},
+    {label: "Desember", code: 12},
+]
+
+const UnitKerjaIndex = []
 
 
 
@@ -271,6 +356,8 @@ const label = [
     },
 ]
 
+const datas = ref({})
+
 const createState = ref(false)
 const editState = ref(false)
 const deleteState = ref(false)
@@ -285,7 +372,7 @@ let i = 1
 const data_effect = ref(PesertaIndex)
 export default {
     watch: {
-        PesertaIndex: {
+        datas: {
             deep: true,
             handler(newValue, oldValue) {
 
@@ -294,9 +381,22 @@ export default {
     },
     // mixins: [Escapable],
     components: {
-    SelectInput,
-    datepicker
-},
+    datepicker,
+    vSelect
+    
+    },
+    created() {
+        this.$watch(
+            () => this.$route.params,
+            () => {
+                this.getDataPeserta()
+                this.getDataUnitKerja()
+            },
+            // fetch the data when the view is created and the data is
+            // already being observed
+            { immediate: true }
+        )
+    },
     setup: () => {
         return {
             PesertaIndex,
@@ -310,11 +410,14 @@ export default {
     },
     data() {
         return {
+            UnitKerjaIndex,
+            datas,
+            Bulan,
             npm: '',
             nama: '',
             nik: '',
             bornPlace: '',
-            bornAt: '',
+            bornAt: new Date,
             genders: '',
             ptType: '',
             instance: '',
@@ -331,36 +434,137 @@ export default {
             division: '',
             ptnType: '',
             dataEdit: null,
-            picked: new Date()
+            picked: new Date(),
+            npmRef,
+            namaRef,
+            nikRef,
+            bornPlaceRef,
+            bornAtRef,
+            gendersRef,
+            ptnTypeRef,
+            instanceRef,
+            pddkRef,
+            jurusanRef,
+            nomorRef,
+            magangTypeRef,
+            magangProgramRef,
+            commitAtRef,
+            durationRef,
+            domisiliRef,
+            namaOrtuRef,
+            pekerjaanOrtuRef,
+            divisionRef,
+            ptnTypeRef,
 
         }
     },
     name: 'PesertaComponents',
-    computed: {
-        paginate(){
-            
-        },
-        size(){
-
-        }
-    },
     methods: {
-        outsideClicked() {
-            // this.createState = false
-            console.log('msk')
+        async getDataPeserta() {
+            await axios.get('/data-peserta').then(e => {
+               this.datas.value = e.data.content
+               console.log(this.datas)
+            }).catch(e => console.log(e));
         },
-        handleSubmit(e){
-            const { [Object.keys(PesertaIndex).pop()]: lastItem } = PesertaIndex;
-                const newID = parseInt(lastItem.ID)
+        async handleSubmit(e){
 
-                PesertaIndex.push({
-                    name: this.nama,
-                    Npm: this.npm,
-                    ID: newID + 1
+            console.log(this.npm)
+            console.log(this.nama)
+            console.log(this.nik)
+            console.log(this.bornPlace)
+            console.log(this.bornAt)
+            console.log(this.genders)
+            console.log(this.ptnType)
+            console.log(this.instance)
+            console.log(this.pddk)
+            console.log(this.jurusan)
+            console.log(this.nomor)
+            console.log(this.magangType)
+            console.log(this.magangProgram)
+            console.log(this.commitAt.code)
+            console.log(this.duration)
+            console.log(this.domisili)
+            console.log(this.namaOrtu)
+            console.log(this.pekerjaanOrtu)
+            console.log(this.division)
+            console.log(this.ptnType)
+
+            npmRef.value = (this.npm != '') ? false : true
+            namaRef.value = (this.nama != '') ? false : true
+            nikRef.value = (this.nik != '') ? false : true
+            bornPlaceRef.value = (this.bornPlace != '') ? false : true
+            bornAtRef.value = (this.bornAt != '') ? false : true
+            gendersRef.value = (this.genders != '') ? false : true
+            instanceRef.value = (this.instance != '') ? false : true
+            pddkRef.value = (this.pddk != '') ? false : true
+            jurusanRef.value = (this.jurusan != '') ? false : true
+            nomorRef.value = (this.nomor != '') ? false : true
+            magangTypeRef.value = (this.magangType != '') ? false : true
+            magangProgramRef.value = (this.magangProgram != '') ? false : true
+            commitAtRef.value = (this.commitAt != '') ? false : true
+            durationRef.value = (this.duration != '') ? false : true
+            domisiliRef.value = (this.domisili != '') ? false : true
+            namaOrtuRef.value = (this.namaOrtu != '') ? false : true
+            pekerjaanOrtuRef.value = (this.pekerjaanOrtu != '') ? false : true
+            divisionRef.value = (this.division != '') ? false : true
+            ptnTypeRef.value = (this.ptnType != '') ? false : true
+
+            // if(!npmRef.value) return false
+            // if(!namaRef.value) return false
+            // if(!nikRef.value) return false
+            // if(!bornPlaceRef.value) return false
+            // if(!bornAtRef.value) return false
+            // if(!gendersRef.value) return false
+            // if(!instanceRef.value) return false
+            // if(!pddkRef.value) return false
+            // if(!jurusanRef.value) return false
+            // if(!nomorRef.value) return false
+            // if(!magangTypeRef.value) return false
+            // if(!magangProgramRef.value) return false
+            // if(!commitAtRef.value) return false
+            // if(!durationRef.value) return false
+            // if(!domisiliRef.value) return false
+            // if(!namaOrtuRef.value) return false
+            // if(!pekerjaanOrtuRef.value) return false
+            // if(!divisionRef.value) return false
+            // if(!ptnTypeRef.value) return false
+
+                
+            await axios.post('/data-peserta', {
+                npm: this.npm,
+                nama: this.nama,
+                nik: this.nik,
+                bornPlace: this.bornPlace,
+                bornAt: this.bornAt,
+                genders: this.genders,
+                ptType: this.ptType,
+                instance: this.instance,
+                pddk: this.pddk,
+                jurusan: this.jurusan,
+                nomor: this.nomor,
+                magangType: this.magangType,
+                magangProgram: this.magangProgram,
+                commitAt: this.commitAt.code,
+                duration: this.duration,
+                domisili: this.domisili,
+                namaOrtu: this.namaOrtu,
+                pekerjaanOrtu: this.pekerjaanOrtu,
+                division: this.division,
+                ptnType: this.ptnType,
+            }).then(e => {
+                this.getDataPeserta()
+               })
+            .catch(e => console.log(e))
+        },
+        getDataUnitKerja(page = 0) {
+            axios.get('/unitkerja?size=999&page=' + page).then(e => {
+                let data = []
+                console.log(e.data.content)
+                e.data.content.forEach(element => {
+                    data.push( {label: element.namadivisi})
                 });
-                this.nama = ''
-                this.npm = ''
-                createState.value = false
+                this.UnitKerjaIndex = data
+            }).catch(e => console.log(e));
         },
     }, 
     // created() {

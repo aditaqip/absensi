@@ -56,10 +56,7 @@ export const useAuthStores = defineStore('auth', {
                    return
                 }
                 let data = JSON.parse(localStorage.getItem('user'))
-                const user = axios.get('user', {
-                    email: data.userEmail,
-                    token: data.token
-                }).then((e) => {
+                const user = axios.get('user?email=' + data.userEmail).then((e) => {
                     console.log(e)
                     if (e.status == 200) {
                         this.isLogin = true

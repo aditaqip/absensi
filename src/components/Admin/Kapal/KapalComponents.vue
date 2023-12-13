@@ -17,7 +17,7 @@
                             </span>
                             <span>Tambah Data Kapal</span>
                         </button>
-                        <div>Show <input type="number" class="ml-3 pl-5 w-16 h-6 border border-black rounded-lg" /></div>
+                        <div>Show <input v-model="size" type="number" class="ml-3 pl-5 w-16 h-6 border border-black rounded-lg" /></div>
                     </div>
                     <table class="w-full table whitespace-nowrap">
                         <thead class="w-3/5 font-thin">
@@ -33,12 +33,12 @@
                         <tbody v-if="(typeof KapalIndex != 'undefined')">
                             <tr v-for="(index, items) in KapalIndex">
                                 <td class="text-center py-2">{{++items}}</td>
-                                <td class="text-center py-2">{{index.Kapal}}</td>
+                                <td class="text-center py-2">{{index.namakapal}}</td>
                                 <td class="flex py-2 justify-center items-center w-32 gap-2">
-                                    <a class="w-1/2 flex justify-center cursor-pointer rounded bg-[#0D6EFD] text-white py-1 px-5" href="#" v-on:click="editState = !editState; getId=index.ID;  data_update = index; getUpdated(data_update)">
+                                    <a class="w-1/2 flex justify-center cursor-pointer rounded bg-[#0D6EFD] text-white py-1 px-5" v-on:click="editState = !editState; getId=index.idkapal;  data_update = index; getUpdated(data_update)">
                                         Edit
                                     </a>
-                                    <a class="w-1/2 flex justify-center cursor-pointer rounded bg-[#DC3545] text-white py-1 px-5" v-on:click="deleteState = !deleteState; getId=index.ID;  data_update = index; getUpdated(data_update)">
+                                    <a class="w-1/2 flex justify-center cursor-pointer rounded bg-[#DC3545] text-white py-1 px-5" v-on:click="deleteState = !deleteState; getId=index.idkapal;  console.log(getId); data_update = index; getUpdated(data_update)">
                                        Delete
                                     </a>
                                 </td>
@@ -49,7 +49,7 @@
             </div>
         </div>
     </div>
-    <div class="backdrop-brightness-50 w-full h-screen left-0 right-0 top-0 flex justify-center items-center" :class="(createState) ? 'absolute z-50' : 'hidden'">
+    <div class="backdrop-brightness-50 w-full h-screen left-0 right-0 top-0 flex justify-center items-center" :class="(createState) ? 'absolute z-50' : 'hidden'"  @click.self="createState=false">
         <form @keydown.esc="createState = false" @submit.prevent="handleSubmit" class="bg-white border-[15px] border-white rounded-2xl w-4/5 md:w-2/5 md:p-14 p-3">
             <div class="text-2xl font-medium text-center flex justify-center">
                 <div class="border-b-2 border-black pb-3 px-9">
@@ -73,7 +73,7 @@
             </div>
         </form>
     </div>
-    <div class="backdrop-brightness-50 w-full h-screen left-0 right-0 top-0 flex justify-center items-center" :class="(editState) ? 'absolute z-50' : 'hidden'">
+    <div class="backdrop-brightness-50 w-full h-screen left-0 right-0 top-0 flex justify-center items-center" :class="(editState) ? 'absolute z-50' : 'hidden'"  @click.self="editState=false">
         <form @keydown.esc="editState = false" @submit.prevent="edited(getId)" class="bg-white border-[15px] border-white rounded-2xl  w-4/5 md:w-2/5 md:p-14 p-3">
             <div class="text-2xl font-medium text-center flex justify-center">
                 <div class="border-b-2 border-black pb-3 px-9">
@@ -97,7 +97,7 @@
             </div>
         </form>
     </div>
-    <div class="backdrop-brightness-50 w-full h-screen left-0 right-0 top-0 flex justify-center items-center" :class="(deleteState) ? 'absolute z-50' : 'hidden'">
+    <div class="backdrop-brightness-50 w-full h-screen left-0 right-0 top-0 flex justify-center items-center" :class="(deleteState) ? 'absolute z-50' : 'hidden'"  @click.self="deleteState=false">
         <form @keydown.esc="deleteState = false" @submit.prevent="deleted(getId)" class="bg-white border-[15px] border-white rounded-2xl w-4/5 md:w-2/5 md:p-14 p-3">
             <div class="text-2xl font-medium text-center flex justify-center">
                 <div class="border-b-2 border-black pb-3 px-9">
@@ -125,7 +125,7 @@
 
 <script>
 import {ref, defineAsyncComponent} from 'vue'
-import {KapalIndex} from '../../../stores/Kapal.js'
+import axios from 'axios'
 
 
 const data = [
@@ -146,26 +146,6 @@ const data = [
         models: 'mama'
     },
 ];
-
-
-const ModalCreateKapal = defineAsyncComponent({
-        loader: () => import('./partials/ModalCreateKapal.vue'),
-        delay:500,
-        timeout: 60000
-})
-const editModalsKapal = defineAsyncComponent({
-        loader: () => import('./partials/editModalsKapal.vue'),
-        delay:500,
-        timeout: 60000,
-})
-
-const deletetModalsKapal = defineAsyncComponent({
-        loader: () => import('./partials/deletetModalsKapal.vue'),
-        delay:500,
-        timeout: 60000,
-})
-
-
 const label = [
     {
         name: 'Nama Kapal'
@@ -178,13 +158,26 @@ const deleteState = ref(false)
 
 const getId = ref(null)
 
+const nameRef = ref(false)
 const data_update = ref(null)
 
 let i = 1
 
-const data_effect = ref(KapalIndex)
+const KapalIndex = ref({})
 export default {
     components: {
+    },
+    created() {
+        this.$watch(
+            () => this.$route.params,
+            () => {
+                this.getDataKapal(this.size)
+            },
+            // fetch the data when the view is created and the data is
+            // already being observed
+            { immediate: true }
+        )
+        this.getDataKapal(this.size)
     },
     setup: () => {
         return {
@@ -194,7 +187,8 @@ export default {
             createState,
             data,
             editState,
-            deleteState
+            deleteState,
+            size: 5,
         }
     },
     data() {
@@ -204,36 +198,41 @@ export default {
     },
     name: 'KapalComponents',
     methods: {
-        escHandling() {
-            // this.createState = false
-            console.log('msk')
-        },
-        handleSubmit(e){
-            const { [Object.keys(KapalIndex).pop()]: lastItem } = KapalIndex;
-                const newID = parseInt(lastItem.ID)
+        async handleSubmit(e){
+            nameRef.value = (this.nama != '') ? false : true
 
-                KapalIndex.push({
-                    Kapal: this.nama,
-                    ID: newID + 1
-                });
-                this.nama = ''
-                createState.value = false
-                console.log(KapalIndex)
+            if(nameRef.value) return false
+            await axios.post('/kapal', {
+                nama: this.nama
+            }).then(e=> {
+                this.getDataKapal(this.size)
+                console.log(e)
+            }).catch(e=> console.log(e));
         },
-       
-        deleted(id) {
-            KapalIndex.splice(KapalIndex.findIndex(a => a.ID === id) , 1)
-            getId.value = null
-            deleteState.value = false
+        async deleted(id) {
+            await axios.delete('/kapal/'+id).then(e => {
+                this.getDataKapal(this.size)
+            }).catch(e => console.log(e));
         },
         getUpdated(data){
-            this.nama = data.Kapal
+            this.nama = data.namakapal
         },
-        edited(id){
-            let no = KapalIndex.findIndex(a => a.ID === id)
-            KapalIndex[no].Kapal = this.nama
-            editState.value = false
-        }
+        async edited(id){
+           if (this.nama == '') return false
+
+            await axios.put('/kapal/' + id, {
+                nama: this.nama
+            }).then(e=> {
+                this.getDataKapal(this.size)
+            }).catch(e=> console.log(e));
+        },
+
+        async getDataKapal(size = 10, page = 0) {
+            await axios.get('/kapal?size=' + size + '&page=' + page).then(e => {
+               this.KapalIndex = e.data.content
+               console.log(this.KapalIndex)
+            }).catch(e => console.log(e));
+        },
     }
 
    

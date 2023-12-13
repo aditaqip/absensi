@@ -76,20 +76,19 @@ const stateIndex = ref(0)
 export default {
     data() {
         return {
-            stateIndex
+            stateIndex,
+            DataPesertaIndex
         }
     },
-    setup() {
-        return {
-            DataPesertaIndex
-        };
+    created() {
+        this.getDataPeserta()
     },
-    mounted() {
-        axios.get('peserta').then((e) => {
-            this.DataPesertaIndex = e.data.length
-        }).catch(error => {
-            // this.$router.push('/404')
-        })
+    methods: {
+        async getDataPeserta() {
+            await axios.get('/data-peserta').then(e => {
+               this.DataPesertaIndex = e.data.content.length
+            }).catch(e => console.log(e));
+        },
     }
 }
 </script>

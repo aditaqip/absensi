@@ -1,5 +1,5 @@
 <template>
-    <div class="flex text-white flex-col gap-[10px] w-full w-max-3/5">
+    <div class="flex text-white flex-col gap-[10px] w-full w-max-3/5 justify-center">
         <div>
             <label :for="name+'-id'">{{label}}<span class="text-red-700" :class="!required && 'hidden'">*</span></label>
         </div>

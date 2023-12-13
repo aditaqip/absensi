@@ -8,7 +8,4 @@ try {
         axios.defaults.headers['Authorization'] = "Bearer " + token;
     }
 } catch (error) {
-    console.log(error)
 }
-
-console.log(axios.defaults.headers)
