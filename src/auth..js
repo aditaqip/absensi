@@ -15,7 +15,7 @@ export const useAuthStores = defineStore('auth', {
       }),
     actions: {
         async login(email, password) {
-            const user = await axios.post('auth/login', {
+            const user = await axios.post('login', {
                 email: email,
                 password: password
             }).then((e) => {
@@ -25,8 +25,8 @@ export const useAuthStores = defineStore('auth', {
                 if (e.status == 200) {
                     this.isLogin = true
                     // this.userInfo = e.data.
-                    let token = e.data.access_token
-                    let userEmail = e.data.userInfo.email
+                    let token = e.data.Token
+                    let userEmail = e.data.Email
                     const userInfo = {
                         token: token,
                         userEmail : userEmail
@@ -50,16 +50,17 @@ export const useAuthStores = defineStore('auth', {
         },
         getUserInfo() {
             try{
-                if (typeof localStorage.getItem('user') == 'undefined') {
+                if (localStorage.getItem('user') == null) {
                    this.isLogin = false
                    router.push('/login');
                    return
                 }
                 let data = JSON.parse(localStorage.getItem('user'))
-                const user = axios.post('users', {
+                const user = axios.get('user', {
                     email: data.userEmail,
                     token: data.token
                 }).then((e) => {
+                    console.log(e)
                     if (e.status == 200) {
                         this.isLogin = true
                         router.push('/dashboard');
@@ -82,8 +83,6 @@ export const useAuthStores = defineStore('auth', {
                return
             }
             return JSON.parse(localStorage.getItem('user')).userEmail
-
-            
         }
     }
     

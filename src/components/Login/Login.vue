@@ -73,10 +73,6 @@
                 loginStore
             }
         },
-        created: async () => {
-            const loginStore = useAuthStores()
-            loginStore.getUserInfo()
-        },
         methods: {
                 
                 // return new Promise(function (resolve, reject) {     

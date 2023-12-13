@@ -7,8 +7,11 @@ const login = {
 
 const checkLogin = (email, password) => {
 
-    axios.get('localhost:3000/user').then(() => {
-        
+    axios.get('localhost:3000/login', {
+        "email": email,
+        "password": password
+    }).then((e) => {
+        console.log(e)
     })
     // return new Promise(function (resolve, reject) {     
     //     if (login.email == email && login.password == password) {
