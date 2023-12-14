@@ -20,7 +20,7 @@ import { ref } from 'vue';
 
 const rotate3 = ref(false)
 export default {
-    data(){
+    computed(){
         return {
             rotate3
         }

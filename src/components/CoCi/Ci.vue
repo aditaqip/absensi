@@ -15,11 +15,11 @@
             <Time />
             <form v-on:submit.prevent="submitHandling" method="post">
                 <div class="w-4/5 md:w-2/4 grid grid-flow-row gap-5 mb-44 mt-10" >
-                    <inputText v-model="npm" label="Nomor Peserta Magang" :disabled="false" v-on:focusout="GetUsers()"/>
-                    <inputText v-model="nama" label="Nama Peserta Magang" :disabled="false"/>
-                    <selectCheck v-model="magangType" label="Jenis Program Magang" :disabled="false" name="magangType" :data="[{label : 'Magang Darat',value:'Magang Darat'},{label : 'Magang Laut',value:'Magang Laut'}]"/>
-                    <selectCheck v-model="absensiType" label="Jenis Absensi" :disabled="false" name="absensiType" :data="[{label : 'Check In',value:'Check In'},{label : 'Check Out',value:'Check Out'}]"/>
-                    <selectCheck v-model="unitKerja" label="Unit Kerja Magang" :disabled="false" :data="UnitKerjaIndex" name="unitKerja"/>
+                    <inputText v-model="npm" label="Nomor Peserta Magang" :required="true" :disabled="false" v-on:focusout="GetUsers()"/>
+                    <inputText v-model="nama" label="Nama Peserta Magang" :required="true" :disabled="false"/>
+                    <selectCheck v-model="magangType" label="Jenis Program Magang" :required="true" :disabled="false" name="magangType" :data="[{label : 'Magang Darat',value:'Magang Darat'},{label : 'Magang Laut',value:'Magang Laut'}]"/>
+                    <selectCheck v-model="absensiType" label="Jenis Absensi" :required="true" :disabled="false" name="absensiType" :data="[{label : 'Check In',value:'Check In'},{label : 'Check Out',value:'Check Out'}]"/>
+                    <selectCheck v-model="unitKerja" label="Unit Kerja Magang" :required="true" :disabled="false" :data="UnitKerjaIndex" name="unitKerja"/>
                     <div style="positon:relative; height:600px; width:100%" :val="latitude">
                         <l-map ref="map" v-model:zoom="zoom" v-model:center="getLocation" :use-global-leaflet="false">
                             <l-tile-layer
