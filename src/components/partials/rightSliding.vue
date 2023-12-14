@@ -35,6 +35,9 @@
             },
             swiped_leftsliding () {
                 this.stateslide = true
+                setTimeout(() => {
+                    this.$router.push('/check-out')
+                }, 1000)
             }
         }
     }
