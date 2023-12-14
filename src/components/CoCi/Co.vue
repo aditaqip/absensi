@@ -15,11 +15,11 @@
             <Time />
             <form v-on:submit.prevent="submitHandling" method="post" class="flex justify-center">
                 <div class="w-4/5 md:w-3/4 grid grid-flow-row gap-5 mb-44 mt-10 justify-items-center">
-                    <inputText v-model="npm" label="Nomor Peserta Magang" :disabled="false"/>
-                    <inputText v-model="nama" label="Nama Peserta Magang" :disabled="false"/>
-                    <selectCheck v-model="magangType" label="Jenis Program Magang" :disabled="false" :data="[{label : 'test',value:'test'}]"/>
-                    <selectCheck v-model="absensiType" label="Jenis Absensi" :disabled="false" :data="[{label : 'test',value:'test'}]"/>
-                    <selectCheck v-model="unitKerja" label="Unit Kerja Magang" :disabled="false" :data="[{label : 'test',value:'test'}]"/>
+                    <inputText v-model="npm" label="Nomor Peserta Magang" required="true" :disabled="false"/>
+                    <inputText v-model="nama" label="Nama Peserta Magang" required="true" :disabled="false"/>
+                    <selectCheck v-model="magangType" label="Jenis Program Magang" required="true" :disabled="false" :data="[{label : 'test',value:'test'}]"/>
+                    <selectCheck v-model="absensiType" label="Jenis Absensi" required="true" :disabled="false" :data="[{label : 'test',value:'test'}]"/>
+                    <selectCheck v-model="unitKerja" label="Unit Kerja Magang" required="true" :disabled="false" :data="[{label : 'test',value:'test'}]"/>
 
                     <div style="positon:relative; height:600px; width:100%" :val="latitude">
                         <l-map ref="map" v-model:zoom="zoom" v-model:center="getLocation" :use-global-leaflet="false">
