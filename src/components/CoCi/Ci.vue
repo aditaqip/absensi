@@ -13,13 +13,13 @@
         </div>
         <div class="flex justify-center flex-col items-center">
             <Time />
-            <form v-on:submit.prevent="submitHandling" method="post" class="flex justify-center">
-                <div class="w-4/5 md:w-2/4 grid grid-flow-row gap-5 mb-44 mt-10 justify-items-center">
-                    <inputText v-model="npm" label="Nomor Peserta Magang" :disabled="false"/>
+            <form v-on:submit.prevent="submitHandling" method="post">
+                <div class="w-4/5 md:w-2/4 grid grid-flow-row gap-5 mb-44 mt-10" >
+                    <inputText v-model="npm" label="Nomor Peserta Magang" :disabled="false" v-on:focusout="GetUsers()"/>
                     <inputText v-model="nama" label="Nama Peserta Magang" :disabled="false"/>
-                    <selectCheck v-model="magangType" label="Jenis Program Magang" :disabled="false" :data="[{label : 'test',value:'test'}]"/>
-                    <selectCheck v-model="absensiType" label="Jenis Absensi" :disabled="false" :data="[{label : 'test',value:'test'}]"/>
-                    <selectCheck v-model="unitKerja" label="Unit Kerja Magang" :disabled="false" :data="[{label : 'test',value:'test'}]"/>
+                    <selectCheck v-model="magangType" label="Jenis Program Magang" :disabled="false" name="magangType" :data="[{label : 'Magang Darat',value:'Magang Darat'},{label : 'Magang Laut',value:'Magang Laut'}]"/>
+                    <selectCheck v-model="absensiType" label="Jenis Absensi" :disabled="false" name="absensiType" :data="[{label : 'Check In',value:'Check In'},{label : 'Check Out',value:'Check Out'}]"/>
+                    <selectCheck v-model="unitKerja" label="Unit Kerja Magang" :disabled="false" :data="UnitKerjaIndex" name="unitKerja"/>
                     <div style="positon:relative; height:600px; width:100%" :val="latitude">
                         <l-map ref="map" v-model:zoom="zoom" v-model:center="getLocation" :use-global-leaflet="false">
                             <l-tile-layer
@@ -43,10 +43,20 @@
 import { ref } from 'vue';
 import Time from './partials/Time.vue'
 import inputText from './partials/inputText.vue';
+import axios from 'axios';
 import selectCheck from './partials/selectCheck.vue';
 import { LMap, LTileLayer, LIcon, LLayerGroup, LMarker } from "@vue-leaflet/vue-leaflet";
 let latitude = ref(null);
 let longitude = ref(null);
+
+const namaRef = ref(false)
+const magangTypeRef = ref(false)
+const absensiTypeRef = ref(false)
+const unitKerjaRef = ref(false)
+const latitudeRef = ref(false)
+const longitudeRef = ref(false)
+
+const UnitKerjaIndex = []
 
 let center;
 if (navigator.geolocation) {
@@ -60,6 +70,9 @@ if (navigator.geolocation) {
 }
 
 export default {
+    created(){
+        this.getDataUnitKerja()
+    },
     data() {
         return {
             date: new Date(),
@@ -74,7 +87,8 @@ export default {
             zoom:10,
             latitude,
             longitude,
-            center
+            center,
+            UnitKerjaIndex
         };
     },
     methods: {
@@ -103,7 +117,7 @@ export default {
             }
             return day
         },
-        getLocation(){
+        async getLocation(){
             if (navigator.geolocation) {
                 navigator.geolocation.getCurrentPosition(function(position) {
                     const latitude = position.coords.latitude;
@@ -123,8 +137,65 @@ export default {
             return month[i]
         },
         submitHandling() {
-            console.log('submitted')
-        }
+            if(this.nama == '') this.nama.value = true
+            if(this.magangType == '') this.magangType.value = true
+            if(this.absensiType == '') this.absensiType.value = true
+            if(this.unitKerja == '') this.unitKerja.value = true
+            if(this.latitude == '') this.latitude.value = true
+            if(this.longitude == '') this.longitude.value = true
+
+            // if(namaRef) return false
+            // if(magangTypeRef) return false
+            // if(absensiTypeRef) return false
+            // if(unitKerjaRef) return false
+            // if(latitudeRef) return false
+            // if(longitudeRef) return false
+            let PARAM = [
+                {key: "npm", value: this.npm},
+                {key: "divisi", value:this.unitKerja},
+                {key: "kapal", value:this.kapal},
+                {key: "location", value: [this.latitude,  this.longitude]},
+                {key: "typemagang", value:this.magangType}
+            ]
+            let url = '?'
+            PARAM.forEach(element => {
+                url += element.key + '=' + element.value + '&' 
+            });
+
+            axios.post('/checkin' + url).then(e => {
+                console.log(e)
+            })
+        },
+        async GetUsers(){
+            await axios.get('/search_dataByNpm?npm=' + this.npm).then(e=> {
+                this.nama = e.data.content[0].namalengkap
+                this.magangType = e.data.content[0].jenismagang
+                this.absensiType = "Check In"
+                this.unitKerja = e.data.content[0].divisipenempatan
+                
+                // document.querySelector("#unitKerja-id").value = e.data.content[0].divisipenempatan
+                // document.querySelector("#magangType-id").value = e.data.content[0].jenismagang
+                // document.querySelector("#absensiType-id").value = "Check In"
+            })
+        },
+        getDivisi(divisi, value){
+            length = divisi.length
+            for (let index = 0; index < divisi.length; index++) {
+                if (divisi[index]._value == '') {
+                    return divisi[index]
+                }                
+            }
+        },
+        getDataUnitKerja(page = 0) {
+            axios.get('/unitkerja?size=999&page=' + page).then(e => {
+                let data = []
+                console.log(e.data.content)
+                e.data.content.forEach(element => {
+                    data.push({label: element.namadivisi, value: element.namadivisi})
+                });
+                this.UnitKerjaIndex = data
+            }).catch(e => console.log(e));
+        },
     },
     name: 'ci',
     components: {
@@ -133,7 +204,7 @@ export default {
         selectCheck,
         LMap,
         LTileLayer,
-    }
+    },
 }
 
 </script>
