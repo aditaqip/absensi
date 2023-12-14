@@ -73,10 +73,9 @@ export default {
       @slideChange="onSlideChange"
     
     >
-      <swiper-slide><div><img class="w-full rounded-xl" src="./../../assets/images/slide-1.png" alt=""></div></swiper-slide>
-      <swiper-slide><div><img class="w-full rounded-xl h-fit" src="./../../assets/images/kapal2.png" alt=""></div></swiper-slide>
-      <swiper-slide><img class="w-full rounded-xl" src="./../../assets/images/kapal3.png" alt=""></swiper-slide>
-      <swiper-slide><img class="w-full rounded-xl" src="./../../assets/images/slide-1.png" alt=""></swiper-slide>
+      <swiper-slide><div><img class="w-full rounded-xl h-full" src="./../../assets/images/slide-1.png" alt=""></div></swiper-slide>
+      <swiper-slide><div><img class="w-full rounded-xl h-full" src="./../../assets/images/kapal2.png" alt=""></div></swiper-slide>
+      <swiper-slide><div><img class="w-full rounded-xl h-full" src="./../../assets/images/kapal5.png" alt=""></div></swiper-slide>
     </swiper>
   </div>
 </template>
