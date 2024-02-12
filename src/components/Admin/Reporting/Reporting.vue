@@ -54,10 +54,11 @@
                                 <td class="text-center py-2 p-3">{{++items}}</td>
                                 <td class="text-center py-2 p-3">{{index.Npm}}</td>
                                 <td class="text-center py-2 p-3">{{index.name}}</td>
-                                <td class="text-center py-2 p-3">{{index.NIK}}</td>
-                                <td class="text-center py-2 p-3">{{index.tglahir}}</td>
-                                <td class="text-center py-2 p-3">{{(index.gender == "L") ? 'Laki-Laki' : 'Perempuan'}}</td>
-                                <td class="text-center py-2 p-3">{{index.type}}</td>
+                                <td class="text-center py-2 p-3">{{index.jenisAbsen}}</td>
+                                <td class="text-center py-2 p-3">{{index.unitKerja}}</td>
+                                <td class="text-center py-2 p-3">{{index['Nama Kapal']}}</td>
+                                <td class="text-center py-2 p-3">{{index.checkIn}}</td>
+                                <td class="text-center py-2 p-3">{{index.checkOut}}</td>
                                 <!-- <td class="flex py-2 justify-center items-center w-32 gap-2">
                                     <a class="w-1/2 flex justify-center cursor-pointer rounded bg-[#0D6EFD] text-white py-1 px-5" href="#" v-on:click="editState = !editState; getId=index.ID;  data_update = index; getUpdated(data_update)">
                                         Edit
@@ -91,6 +92,9 @@ const label = [
     },
     {
         name: 'Jenis Absen'
+    },
+    {
+        name: 'Unit Kerja'
     },
     {
         name: 'Nama Kapal'

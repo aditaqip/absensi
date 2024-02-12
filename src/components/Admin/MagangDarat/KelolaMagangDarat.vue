@@ -7,6 +7,11 @@
                     <hr />
                     <div class="flex justify-between items-center flex-wrap my-8">
                         <div>Show <input type="number" class="mx-3 pl-5 w-16 h-6 border border-black rounded-lg" :value="dataMounted" />Data</div>
+                        <a :href="excelFileUrl" download>
+        <button class="bg-blue-500 text-white px-4 py-2 rounded-lg">
+          Unduh Excel
+        </button>
+      </a>
                     </div>
                     <table class="w-full table whitespace-nowrap">
                         <thead class="w-3/5 font-thin">
@@ -35,14 +40,14 @@
                                 <td class="text-center py-2 p-3">{{index.alamatDomisili}}</td>
                                 <td class="text-center py-2 p-3">{{index.parentName}}</td>
                                 <td class="text-center py-2 p-3">{{index.parentJob}}</td>
-                                <!-- <td class="flex py-2 justify-center items-center w-32 gap-2">
+                                <td class="flex py-2 justify-center items-center w-32 gap-2">
                                     <a class="w-1/2 flex justify-center cursor-pointer rounded bg-[#0D6EFD] text-white py-1 px-5" href="#" v-on:click="editState = !editState; getId=index.ID;  data_update = index; getUpdated(data_update)">
                                         Edit
                                     </a>
                                     <a class="w-1/2 flex justify-center cursor-pointer rounded bg-[#DC3545] text-white py-1 px-5" v-on:click="deleteState = !deleteState; getId=index.ID;  data_update = index; getUpdated(data_update)">
                                        Delete
                                     </a>
-                                </td> -->
+                                </td>
                             </tr>
                         </tbody>
                     </table>
@@ -57,6 +62,41 @@ import {ref, defineAsyncComponent} from 'vue'
 import {PesertaIndex} from '../../../stores/Peserta.js'
 
 
+
+// let dataTable = reactive({})
+
+// const exportDataToExcel = () => {
+//   if (dataTable) {
+//     dataTable.forEach((d) => {
+//       const dataRow = {
+//         Nama: d.user.nama,
+//         Jabatan: d.user.jabatan.nama,
+//         'Jenis Kelamin': d.user.jenisKelamin === 'L' ? 'Laki-laki' : 'Perempuan',
+//         'Tempat Masuk': d.tempatMasuk,
+//         'Metode Masuk': d.metodeMasuk,
+//         'Metode Keluar': d.metodeKeluar ?? '-',
+//         'Waktu Masuk': new Date(d.waktuMasuk).toLocaleString('en-US', {
+//           year: 'numeric',
+//           month: 'short',
+//           day: 'numeric',
+//           hour: 'numeric',
+//           minute: 'numeric',
+//           hour12: true
+//         }),
+//         'Waktu Keluar': d.waktuKeluar
+//           ? new Date(d.waktuKeluar).toLocaleString('en-US', {
+//             year: 'numeric',
+//             month: 'short',
+//             day: 'numeric',
+//             hour: 'numeric',
+//             minute: 'numeric',
+//           })
+//           : '-'
+//       }
+//       dataForExcel.push(dataRow)
+//     })
+//   }
+// }
 
 
 
@@ -129,9 +169,12 @@ export default {
         }
     },
     data() {
-        return {
-            nama: '',
-        }
+        return { 
+        
+      dataMounted: 10, // Ganti dengan jumlah data default yang sesuai
+      excelFileUrl: 'path/ke/file/excel.xlsx', // Ganti dengan path yang benar
+    };
+
     },
     name: 'KelolaMagangDaratComponents',
     methods: {

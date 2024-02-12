@@ -151,7 +151,7 @@ router.beforeEach(async (to, from) => {
   const publicPages = ['/', '/login', '/check-in', '/check-out'] 
   const authRequired = !publicPages.includes(to.path)
   if (localStorage.getItem('user') != null) {
-    const user_data = JSON.parse(localStorage.getItem('user'))
+    const user_data = JSON.parse(localStorage.getItem('string'))
     // const {email, token} = user_data
     // loginStore.getUserInfo(email, token)
     loginStore.isLogin = true

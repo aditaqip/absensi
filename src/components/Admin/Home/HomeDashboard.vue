@@ -5,8 +5,8 @@
                 <div class="w-full flex justify-between flex-wrap">
                     <h1>Grafik Absensi</h1>
                     <div class="flex gap-5">
-                        <a class="px-3 rounded-xl py-1" :class="stateViewChart && 'border border-black'" href="#" v-on:click="stateViewChart = true">Mingguan</a>
-                        <a class="px-3 rounded-xl py-1" :class="!stateViewChart && 'border border-black'" href="#" v-on:click="stateViewChart = false">Bulanan</a>
+                        <a class="px-3 rounded-xl py-1" :class="stateViewChart && 'border border-black'" href="#" v-on:click="stateViewChart = true">Bulanan</a>
+                        <a class="px-3 rounded-xl py-1" :class="!stateViewChart && 'border border-black'" href="#" v-on:click="stateViewChart = false">Mingguan</a>
                     </div>
                 </div>
                 <div :class="!stateViewChart && 'hidden'">

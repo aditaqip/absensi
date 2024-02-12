@@ -12,7 +12,7 @@
                     </div>
                 </div>
                 <div class="w-3/5 text-right pr-6 py-6">
-                    <h4 class="text-5xl font-semibold">{{DataPesertaIndex}}</h4>
+                    <h4 class="text-5xl md:text-7xl font-semibold">{{DataPesertaIndex}}</h4>
                     <span class="text-sm">Total Peserta Magang</span>
                 </div>
                 <router-link to="/dashboard/total-peserta"  class="w-full border-t-2 text-center py-3 set">
@@ -33,7 +33,7 @@
                     <h4 class="text-5xl md:text-7xl font-semibold">150</h4>
                     <span class="text-sm">Total Peserta Magang Darat</span>
                 </div>
-                <router-link to="/dashboard/total-magang-darat"  class="w-full border-t-2 text-center py-3 set">
+                <router-link to="/dashboard/total-magang-darat" class="w-full border-t-2 text-center py-3 set">
                     <div>Detail</div>
                 </router-link>
             </div>
@@ -70,26 +70,37 @@ import './../../../axioslogged'
 import { ref } from 'vue';
 // import {DataPesertaIndex} from './../../../stores/DataPeserta'
 
+
 const DataPesertaIndex = ref(0)
 
 const stateIndex = ref(0)
 export default {
-    data() {
-        return {
-            stateIndex,
-            DataPesertaIndex
-        }
-    },
-    created() {
-        this.getDataPeserta()
-    },
-    methods: {
-        async getDataPeserta() {
-            await axios.get('/data-peserta').then(e => {
-               this.DataPesertaIndex = e.data.content.length
-            }).catch(e => console.log(e));
-        },
+  data() {
+    return {
+      stateIndex,
+      DataPesertaIndex
     }
+  },
+  created() {
+    this.getDataPeserta()
+  },
+  methods: {
+    async handleLogin() {
+        const email = "fianna@gmail.com";
+        const password = "123456";
+
+      // Logika login, misalnya menggunakan store
+      await this.$store.dispatch('auth/login', { email, password });
+
+      // Setelah login berhasil, alihkan pengguna ke halaman dashboard
+      this.$router.push('/dashboard');
+    },
+    async getDataPeserta() {
+      await axios.get('/data-peserta').then(e => {
+        this.DataPesertaIndex = e.data.content.length
+      }).catch(e => console.log(e));
+    },
+  }
 }
 </script>
 <style>

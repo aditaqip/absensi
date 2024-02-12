@@ -1,13 +1,13 @@
 import axios from 'axios'
 
 const login = {
-    email: 'fianna@gmail.com',
-    password: '123456'
+    "email": "fianna@gmail.com",
+    "password": "123456"
 }
 
 const checkLogin = (email, password) => {
 
-    axios.get('localhost:3000/login', {
+    axios.get('localhost:5173/login', {
         "email": email,
         "password": password
     }).then((e) => {

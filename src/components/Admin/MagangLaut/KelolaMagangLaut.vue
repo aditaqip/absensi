@@ -7,6 +7,11 @@
                     <hr />
                     <div class="flex justify-between items-center flex-wrap my-8">
                         <div>Show <input type="number" class="mx-3 pl-5 w-16 h-6 border border-black rounded-lg" :value="dataMounted" />Data</div>
+                        <a :href="excelFileUrl" download>
+        <button class="bg-blue-500 text-white px-4 py-2 rounded-lg ml-3">
+          Unduh Excel
+        </button>
+      </a>
                     </div>
                     <table class="w-full table whitespace-nowrap">
                         <thead class="w-3/5 font-thin">
@@ -26,6 +31,7 @@
                                 <td class="text-center py-2 p-3">{{index.name}}</td>
                                 <td class="text-center py-2 p-3">{{index.NIK}}</td>
                                 <td class="text-center py-2 p-3">{{index.tglahir}}</td>
+                                <td class="text-center py-2 p-3">{{index["Nama Kapal"]}}</td>
                                 <td class="text-center py-2 p-3">{{(index.gender == "L") ? 'Laki-Laki' : 'Perempuan'}}</td>
                                 <td class="text-center py-2 p-3">{{index.type}}</td>
                                 <td class="text-center py-2 p-3">{{index.instance}}</td>
@@ -35,14 +41,14 @@
                                 <td class="text-center py-2 p-3">{{index.alamatDomisili}}</td>
                                 <td class="text-center py-2 p-3">{{index.parentName}}</td>
                                 <td class="text-center py-2 p-3">{{index.parentJob}}</td>
-                                <!-- <td class="flex py-2 justify-center items-center w-32 gap-2">
+                                <td class="flex py-2 justify-center items-center w-32 gap-2">
                                     <a class="w-1/2 flex justify-center cursor-pointer rounded bg-[#0D6EFD] text-white py-1 px-5" href="#" v-on:click="editState = !editState; getId=index.ID;  data_update = index; getUpdated(data_update)">
                                         Edit
                                     </a>
                                     <a class="w-1/2 flex justify-center cursor-pointer rounded bg-[#DC3545] text-white py-1 px-5" v-on:click="deleteState = !deleteState; getId=index.ID;  data_update = index; getUpdated(data_update)">
                                        Delete
                                     </a>
-                                </td> -->
+                                </td>
                             </tr>
                         </tbody>
                     </table>
@@ -72,6 +78,9 @@ const label = [
     },
     {
         name: 'Tempat, Tanggal Lahir'
+    },
+    {
+        name: 'Nama Kapal'
     },
     {
         name: 'Jenis kelamin'
@@ -130,8 +139,12 @@ export default {
     },
     data() {
         return {
-            nama: '',
-        }
+        
+        
+      dataMounted: 10, // Ganti dengan jumlah data default yang sesuai
+      excelFileUrl: 'path/ke/file/excel.xlsx', // Ganti dengan path yang benar
+    };
+    
     },
     name: 'KelolaMagangLautComponents',
     methods: {

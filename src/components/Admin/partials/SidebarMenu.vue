@@ -2,11 +2,11 @@
     <nav class="w-2/12 md:w-1/12 h-screen duration-300 z-50" :class="(show) && 'absolute left-0 bg-white w-6/12 md:w-3/12'">
       <div class="relative">
         <div class="duration-0 relative" :class="(show) ? 'w-full' : 'hidden'">
-          <div class="inline-flex absolute right-0 top-[40%] cursor-pointer justify-end" v-on:click="show = false; showMaster=false;">
+          <div class="inline-flex absolute right-0 top-[40%] cursor-pointer justify-end" v-on:click="closeSidebar">
             <svg class="w-[40px] md:w-2/12" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 36 36" fill="none">
               <path d="M31.5 10.5L24 18L31.5 25.5" stroke="#85B6FF" stroke-linecap="round" stroke-linejoin="round"/>
             </svg>
-            <svg  class="ml-[-27px] w-[40px]" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 36 36" fill="none">
+            <svg  class="ml-[-27px] w-[40px]" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 36 36" fill="none" v-on:click="toggleSidebar">
               <path d="M31.5 10.5L24 18L31.5 25.5" stroke="#85B6FF" stroke-linecap="round" stroke-linejoin="round"/>
             </svg>
           </div>
@@ -33,24 +33,27 @@
             </router-link>
             </div>
 
+
           <div class="relative py-6 cursor-pointer">
-            <div class="duration-300 group grid gap-2 place-items-center" :class="(show) ? 'hover:bg-[#6690E6] grid-cols-2' : 'hover:border-r-8 hover:border-[#6690E6] grid-cols-1'" v-on:click="show=true; showMaster.showData = !showMaster.showData;">
+            <div class="duration-300 group grid gap-2 place-items-center" :class="(show) ? 'hover:bg-[#6690E6] grid-cols-2' : 'hover:border-r-8 hover:border-[#6690E6] grid-cols-1'" v-on:click="showMaster.showData = !showMaster.showData; if (!showMaster.showData) show = !show;">
               <div class="mx-auto inline-block w-fit" :class="(show) ? 'py-2' : ''">
                 <svg xmlns="http://www.w3.org/2000/svg" class="w-8 h-8 md:w-11 md:h-11 " viewBox="0 0 51 51" fill="none">
                   <path  :class="(show) ? 'duration-500 group-hover:fill-white fill-[#6690E6]' : 'fill-[#6690E6]'" d="M23.375 40.375V19.125H8.5V40.375H23.375ZM23.375 14.875V8.5C23.375 7.93641 23.5989 7.39591 23.9974 6.9974C24.3959 6.59888 24.9364 6.375 25.5 6.375H44.625C45.1886 6.375 45.7291 6.59888 46.1276 6.9974C46.5261 7.39591 46.75 7.93641 46.75 8.5V42.5C46.75 43.0636 46.5261 43.6041 46.1276 44.0026C45.7291 44.4011 45.1886 44.625 44.625 44.625H6.375C5.81141 44.625 5.27091 44.4011 4.8724 44.0026C4.47388 43.6041 4.25 43.0636 4.25 42.5V17C4.25 16.4364 4.47388 15.8959 4.8724 15.4974C5.27091 15.0989 5.81141 14.875 6.375 14.875H23.375ZM27.625 10.625V40.375H42.5V10.625H27.625ZM10.625 34H21.25V38.25H10.625V34ZM29.75 34H40.375V38.25H29.75V34ZM29.75 27.625H40.375V31.875H29.75V27.625ZM29.75 21.25H40.375V25.5H29.75V21.25ZM10.625 27.625H21.25V31.875H10.625V27.625Z" fill="none"/>
                 </svg>
               </div>
-              <div class="inline-block absolute duration-500 text-sm md:text-base" :class="(show) ? 'left-[40%] group-hover:text-white' : 'left-[150%]'">Kelola Data</div>
+
+              <div class="inline-block absolute duration-500 text-sm md:text-base" :class="(show) ? 'left-[40%] group-hover:text-white' : 'left-[150%] hidden'">Kelola Data</div>
             </div>
-            <div class="grid place-items-end mt-8 duration-500" :class="(showMaster.showData) ? 'translate-y-0' : 'hidden translate-y-[-30px]'">
+            <div class="grid place-items-end mt-8 duration-500" :class="{ 'hidden': !(showMaster.showData), 'translate-y-0': show || showMaster.showData }">
               <router-link to="/kelola-magang-darat" class="w-full p-4 hover:bg-[#537ABC] hover:text-white">
-                  <div class="w-3/5 ml-auto">Magang Darat</div>
-              </router-link>
-              <router-link to="/kelola-magang-laut" class="w-full p-4 hover:bg-[#537ABC] hover:text-white">
-                  <div class="w-3/5 ml-auto">Magang Laut</div>
-              </router-link>
-            </div>
-          </div>
+        <div class="w-3/5 ml-auto">Magang Darat</div>
+      </router-link>
+      <router-link to="/kelola-magang-laut" class="w-full p-4 hover:bg-[#537ABC] hover:text-white">
+        <div class="w-3/5 ml-auto">Magang Laut</div>
+      </router-link>
+    </div>
+  </div>
+
           <div class="relative py-6">
               <router-link to="/kelola-unit"  class="duration-300 group grid gap-2 place-items-center" :class="(show) ? 'hover:bg-[#6690E6] grid-cols-2' : 'hover:border-r-8 hover:border-[#6690E6] hover:text-white  grid-cols-1'">
                 <div class="mx-auto inline-block w-fit" :class="(show) ? 'py-2' : ''">
@@ -78,26 +81,36 @@
     </nav>
 </template>
 <script>
-// import menus from '../../../menu/menu';
 import { ref } from 'vue';
-import {RouterLink} from 'vue-router'
-
-
-const show = ref(false)
-const showMaster = ref({
-  showData:false
-})
+import { RouterLink } from 'vue-router';
 
 export default {
-    name: 'SidebarMenu',
-    setup: () => {
-        return {
-            show,
-            showMaster,
-        };
-    },
-}
+  name: 'SidebarMenu',
+  setup() {
+  const show = ref(false);
+  const showMaster = ref({
+    showData: false
+  });
+
+  const toggleSidebar = () => {
+    show.value = !show.value;
+    showMaster.showData = false;
+  };
+
+  const closeSidebar = () => {
+  show.value = false;
+  showMaster.showData = false;
+};
+
+  return {
+    show,
+    showMaster,
+    toggleSidebar,
+  };
+},
+} 
 </script>
+
 <style>
 .router-link-active {
   border-right-width: 8px;
