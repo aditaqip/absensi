@@ -20,6 +20,7 @@
     "require": "^0.4.4",
     "vue": "^3.3.4",
     "vue-chartjs": "^5.2.0",
+    "vue-json-excel3": "^1.0.19",
     "vue-router": "^4.2.5",
     "vue-select": "^4.0.0-beta.6",
     "vue3-datepicker": "^0.4.0",
