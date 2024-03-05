@@ -1,12 +1,12 @@
 <template>
   <div class="w-full overflow-y-auto">
     <div class="h-full">
-      <div class="p-5 bg-slate-100 h-full">
+        <div class="p-5 bg-slate-100 h-full">
         <div
           class="lg:w-full px-5 py-3 rounded-lg block md:block bg-white relative overflow-x-auto"
         >
-          <h1 class="text-xl py-2 font-bold">Data Peserta</h1>
-          <div class="flex justify-end items-center overflow-x-auto">
+        <h1 class="text-xl py-2 font-bold" style="position: sticky; top: 0; left: 0;">Data Peserta</h1>
+          <div class="flex justify-end items-center overflow-x-auto" style="position: sticky; top: 0; left: 0;">
             <download-excel
               :data="dataForExcel"
               type="xlsx"
@@ -42,7 +42,7 @@
           <hr />
           <div
             class="flex justify-between flex-row items-center flex-wrap"
-            style="overflow-x: auto"
+            style="position: sticky; top: 0; left: 0;" 
           >
             <div>
               Show
@@ -58,7 +58,7 @@
                 v-model="searchKeyword"
                 placeholder="Search..."
                 class="border border-gray-300 px-3 py-2 rounded-lg mr-3"
-                @keyup.enter="search"
+                v-on:keyup="search"
               />
             </div>
           </div>
@@ -75,9 +75,9 @@
                 No Data
               </td>
             </tbody>
-            <tbody v-if="typeof PesertaIndex !== 'undefined'">
-              <tr v-for="(index, items) in PesertaIndex">
-                <td class="text-center py-2 p-3">{{ +(+items) }}</td>
+            <tbody v-if="typeof DataPeserta !== 'undefined'">
+              <tr v-for="(index, items) in DataPeserta">
+                <td class="text-center py-2 p-3">{{ items + 1 }}</td>
                 <td class="text-center py-2 p-3">{{ index.Npm }}</td>
                 <td class="text-center py-2 p-3">{{ index.name }}</td>
                 <td class="text-center py-2 p-3">{{ index.NIK }}</td>
@@ -784,6 +784,7 @@ const deleteState = ref(false);
 const dataMounted = ref(15);
 const numberInput = ref("");
 const dataForExcel = [];
+const DataPeserta = ref();
 
 const getId = ref(null);
 
@@ -840,11 +841,17 @@ export default {
       dataForExcel,
     };
   },
+
+  mounted() {
+    this.DataPeserta = PesertaIndex;
+  },
+
   data() {
     return {
+      DataPeserta,
       sorting: {},
       columnFilters: {},
-      searchKeyword: "", // Properti untuk menyimpan kata kunci pencarian
+      searchKeyword: "",
       startDate: "",
       endDate: "",
       UnitKerjaIndex,
@@ -895,38 +902,27 @@ export default {
     };
   },
 
-  computed: {
-  // Metode yang mengembalikan data yang telah difilter berdasarkan kata kunci pencarian
-  searchData() {
-    if (!Array.isArray(this.nama)) {
-      console.error("Data tidak ditemukan atau tidak terdefinisi dengan benar.");
-      return [];
-    }
-    
-    return this.nama.filter(item => {
-      // Menggunakan toLowerCase() untuk pencocokan yang tidak bersifat case-sensitive
-      return item.nama.toLowerCase().includes(this.searchKeyword.toLowerCase());
-    });
-  }
-},
-
-
   name: "PesertaComponents",
   methods: {
     search() {
-    // Lakukan pencarian berdasarkan nama saja
-    const searchData = this.data.filter(item => {
-      return item.name.toLowerCase().includes(this.searchKeyword.toLowerCase());
-    });
+      // Bersihkan filteredData sebelum melakukan pencarian baru
+      this.filteredData = [];
 
-    // Perbarui properti filteredData dengan hasil pencarian
-    this.filteredData = searchData;
-  },
+      // Lakukan pencarian berdasarkan kata kunci pencarian
+      this.filteredData = PesertaIndex.filter((item) => {
+        console.log(item.name);
+        // Menggunakan toLowerCase() untuk pencocokan yang tidak bersifat case-sensitive
+        return item.name
+          .toLowerCase()
+          .includes(this.searchKeyword.toLowerCase());
+      });
 
-    onSortingChange(newSorting) {
-      this.sorting = newSorting;
+      if (this.searchKeyword == "") {
+        this.DataPeserta = PesertaIndex;
+      } else {
+        this.DataPeserta = this.filteredData;
+      }
     },
-
     // Method to handle column filters change
     onColumnFiltersChange(newColumnFilters) {
       this.columnFilters = newColumnFilters;

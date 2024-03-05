@@ -28,7 +28,7 @@ const PesertaIndex = [
     },
     {
         'ID' : 2,
-        'name' : 'Nanda',
+        'name' : 'Nanda Eka ',
         'Npm' : '3232413',
         'NIK' : '32139182472738',
         'Tempatlahir' : 'Bekasi',
