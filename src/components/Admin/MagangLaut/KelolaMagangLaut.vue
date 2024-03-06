@@ -38,7 +38,11 @@
               </td>
             </tbody>
             <tbody v-if="typeof PesertaIndex != 'undefined'">
-              <tr v-for="(index, items) in PesertaIndex">
+              <tr
+                v-for="(index, items) in PesertaIndex.filter(
+                  (item) => item.JenisMagang === 'Magang Laut'
+                )"
+              >
                 <td class="text-center py-2 p-3">{{ ++items }}</td>
                 <td class="text-center py-2 p-3">{{ index.Npm }}</td>
                 <td class="text-center py-2 p-3">{{ index.name }}</td>
@@ -65,8 +69,6 @@
 import { ref, defineAsyncComponent } from "vue";
 import { PesertaIndex } from "../../../stores/Peserta.js";
 import JsonExcel from "vue-json-excel3";
-
-
 
 const label = [
   {
@@ -106,7 +108,7 @@ const editState = ref(false);
 const deleteState = ref(false);
 
 const getId = ref(null);
-const dataForExcel = []; 
+const dataForExcel = [];
 const data_update = ref(null);
 const dataMounted = ref(15);
 
@@ -115,7 +117,7 @@ let i = 1;
 const data_effect = ref(PesertaIndex);
 export default {
   components: {
-    downloadExcel:JsonExcel
+    downloadExcel: JsonExcel,
   },
   setup: () => {
     return {
@@ -138,20 +140,19 @@ export default {
   methods: {
     exportDataToExcel() {
       if (PesertaIndex) {
-        PesertaIndex.forEach((d,i) => {
+        PesertaIndex.forEach((d, i) => {
           const dataRow = {
-            "No": ++i,
-            "NPM": d.Npm,
+            No: ++i,
+            NPM: d.Npm,
             "Nama Lengkap": d.name,
             "Jenis Kelamin": d.gender,
             "No Telp": d.Telp,
-            "Jurusan": d.jurusan,
-            "Kapal": d.namaDivpal,
+            Jurusan: d.jurusan,
+            Kapal: d.namaDivpal,
             "Unit Kerja": d.unitKerja,
             "Tanggal Mulai": d.tgls,
-            "Durasi": d.durasi,
+            Durasi: d.durasi,
             "Tanggal Selesai": d.tgle,
-            
           };
           dataForExcel.push(dataRow);
         });

@@ -38,11 +38,17 @@
               </td>
             </tbody>
             <tbody v-if="typeof PesertaIndex !== 'undefined'">
-              <tr v-for="(index, items) in PesertaIndex">
+              <tr
+                v-for="(index, items) in PesertaIndex.filter(
+                  (item) => item.JenisMagang === 'Magang Darat'
+                )"
+              >
                 <td class="text-center py-2 p-3">{{ ++items }}</td>
                 <td class="text-center py-2 p-3">{{ index.Npm }}</td>
                 <td class="text-center py-2 p-3">{{ index.name }}</td>
-                <td class="text-center py-2 p-3">{{ index.gender === "L" ? "Laki-Laki" : "Perempuan" }}</td>
+                <td class="text-center py-2 p-3">
+                  {{ index.gender === "L" ? "Laki-Laki" : "Perempuan" }}
+                </td>
                 <td class="text-center py-2 p-3">{{ index.Telp }}</td>
                 <td class="text-center py-2 p-3">{{ index.jurusan }}</td>
                 <td class="text-center py-2 p-3">{{ index.namaDivpal }}</td>
@@ -135,7 +141,6 @@ const label = [
 const createState = ref(false);
 const editState = ref(false);
 const deleteState = ref(false);
-
 const getId = ref(null);
 const dataForExcel = [];
 const data_update = ref(null);
