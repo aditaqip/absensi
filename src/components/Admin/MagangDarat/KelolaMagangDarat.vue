@@ -168,27 +168,31 @@ export default {
   data() {
     return {
       dataMounted: 10, // Ganti dengan jumlah data default yang sesuai
+      filteredDataForExcel: [], // inisialisasi properti filteredDataForExcel
     };
   },
   name: "KelolaMagangDaratComponents",
   methods: {
     exportDataToExcel() {
       if (PesertaIndex) {
-        PesertaIndex.forEach((d, i) => {
-          const dataRow = {
-            No: ++i,
-            NPM: d.Npm,
-            "Nama Lengkap": d.name,
-            "Jenis Kelamin": d.gender,
-            "No Telp": d.Telp,
-            Jurusan: d.jurusan,
-            Divisi: d.namaDivpal,
-            "Unit Kerja": d.unitKerja,
-            "Tanggal Mulai": d.tgls,
-            Durasi: d.durasi,
-            "Tanggal Selesai": d.tgle,
-          };
-          dataForExcel.push(dataRow);
+        let i = 0; // Inisialisasi i di luar forEach
+        PesertaIndex.forEach((d) => {
+          if (d.JenisMagang === "Magang Darat") {
+            const dataRow = {
+              No: ++i,
+              NPM: d.Npm,
+              "Nama Lengkap": d.name,
+              "Jenis Kelamin": d.gender,
+              "No Telp": d.Telp,
+              Jurusan: d.jurusan,
+              Divisi: d.namaDivpal,
+              "Unit Kerja": d.unitKerja,
+              "Tanggal Mulai": d.tgls,
+              Durasi: d.durasi,
+              "Tanggal Selesai": d.tgle,
+            };
+            dataForExcel.push(dataRow);
+          }
         });
       }
     },

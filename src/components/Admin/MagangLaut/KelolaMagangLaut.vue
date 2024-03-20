@@ -140,21 +140,24 @@ export default {
   methods: {
     exportDataToExcel() {
       if (PesertaIndex) {
-        PesertaIndex.forEach((d, i) => {
-          const dataRow = {
-            No: ++i,
-            NPM: d.Npm,
-            "Nama Lengkap": d.name,
-            "Jenis Kelamin": d.gender,
-            "No Telp": d.Telp,
-            Jurusan: d.jurusan,
-            Kapal: d.namaDivpal,
-            "Unit Kerja": d.unitKerja,
-            "Tanggal Mulai": d.tgls,
-            Durasi: d.durasi,
-            "Tanggal Selesai": d.tgle,
-          };
-          dataForExcel.push(dataRow);
+        let i = 0; // Inisialisasi i di luar forEach
+        PesertaIndex.forEach((d) => {
+          if (d.JenisMagang === "Magang Laut") {
+            const dataRow = {
+              No: ++i,
+              NPM: d.Npm,
+              "Nama Lengkap": d.name,
+              "Jenis Kelamin": d.gender,
+              "No Telp": d.Telp,
+              Jurusan: d.jurusan,
+              Divisi: d.namaDivpal,
+              "Unit Kerja": d.unitKerja,
+              "Tanggal Mulai": d.tgls,
+              Durasi: d.durasi,
+              "Tanggal Selesai": d.tgle,
+            };
+            dataForExcel.push(dataRow);
+          }
         });
       }
     },

@@ -24,7 +24,7 @@ const PesertaIndex = [
         'tgls' : '1 Januari 2024',
         'tgle' : '1 Januari 2025',
         'durasi' : '12 Bulan',
-        'tanggalmsk' : '26 Februari 2024',
+        'tanggalmsk' : '26 Januari 2024',
     },
     {
         'ID' : 2,
@@ -78,7 +78,7 @@ const PesertaIndex = [
         'tgls' : '1 Januari 2024',
         'tgle' : '1 Januari 2025',
         'durasi' : '12 Bulan',
-        'tanggalmsk' : '26 Februari 2024',
+        'tanggalmsk' : '26 Maret 2024',
     },
     {
         'ID' : 4,
@@ -105,7 +105,7 @@ const PesertaIndex = [
         'tgls' : '1 Januari 2024',
         'tgle' : '1 Januari 2025',
         'durasi' : '12 Bulan',
-        'tanggalmsk' : '26 Februari 2024',
+        'tanggalmsk' : '26 April 2024',
     },
     {
         'ID' : 5,
@@ -132,7 +132,7 @@ const PesertaIndex = [
         'tgls' : '1 Januari 2024',
         'tgle' : '1 Januari 2025',
         'durasi' : '12 Bulan',
-        'tanggalmsk' : '26 Februari 2024',
+        'tanggalmsk' : '26 Mei 2024',
     },
     {
         'ID' : 5,
@@ -159,7 +159,7 @@ const PesertaIndex = [
         'tgls' : '1 Januari 2024',
         'tgle' : '1 Januari 2025',
         'durasi' : '12 Bulan',
-        'tanggalmsk' : '26 Februari 2024',
+        'tanggalmsk' : '26 Juni 2024',
     },
 ]
 

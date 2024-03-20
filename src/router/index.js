@@ -13,6 +13,8 @@ import Reporting from './../views/Reporting.vue';
 import HomeDashboard from './../views/HomeDashboard.vue';
 import KelolaUnit from "./../views/KelolaUnit.vue";
 import notFound from "./../views/notFound.vue";
+import ActivityLog from '../components/Admin/ActivityLog.vue';
+import UserAccesManagement from '../components/Admin/UserAccesManagement.vue';
 import { useAuthStores } from '../auth.';
 
 
@@ -26,6 +28,16 @@ const router = createRouter({
       meta: {
         title: "Absesnsi"
       }
+    },
+    {
+      path: '/UserAccesManagement',
+      name: 'UserAccesManagement',
+      component: UserAccesManagement,
+    },
+    {
+      path: '/ActivityLog',
+      name: 'ActivityLog',
+      component: ActivityLog,
     },
     {
       path: '/check-in',

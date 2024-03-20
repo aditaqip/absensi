@@ -904,25 +904,26 @@ export default {
 
   name: "PesertaComponents",
   methods: {
+    
     search() {
-      // Bersihkan filteredData sebelum melakukan pencarian baru
-      this.filteredData = [];
+  // Bersihkan filteredData sebelum melakukan pencarian baru
+  this.filteredData = [];
 
-      // Lakukan pencarian berdasarkan kata kunci pencarian
-      this.filteredData = PesertaIndex.filter((item) => {
-        console.log(item.name);
-        // Menggunakan toLowerCase() untuk pencocokan yang tidak bersifat case-sensitive
-        return item.name
-          .toLowerCase()
-          .includes(this.searchKeyword.toLowerCase());
-      });
+  // Lakukan pencarian berdasarkan kata kunci pencarian
+  this.filteredData = PesertaIndex.filter((item) => {
+    // Menggabungkan semua nilai dari setiap sel dalam baris menjadi satu string
+    const combinedValues = Object.values(item).join(' ').toLowerCase();
+    // Menggunakan toLowerCase() untuk pencocokan yang tidak bersifat case-sensitive
+    return combinedValues.includes(this.searchKeyword.toLowerCase());
+  });
 
-      if (this.searchKeyword == "") {
-        this.DataPeserta = PesertaIndex;
-      } else {
-        this.DataPeserta = this.filteredData;
-      }
-    },
+  // Periksa jika searchKeyword kosong
+  if (this.searchKeyword === "") {
+    this.DataPeserta = PesertaIndex;
+  } else {
+    this.DataPeserta = this.filteredData;
+  }
+},
     // Method to handle column filters change
     onColumnFiltersChange(newColumnFilters) {
       this.columnFilters = newColumnFilters;
@@ -976,9 +977,16 @@ export default {
       console.log("Data diedit");
     },
     deleteData() {
-      // Logika untuk menghapus data
-      console.log("Data dihapus");
-    },
+  if (confirm('Apakah Anda yakin ingin menghapus data ini?')) {
+    // Cari indeks item berdasarkan id
+    const index = this.items.findIndex(item => item.id === this.selectedItemId);
+    
+    // Hapus item dari array items jika ditemukan
+    if (index !== -1) {
+      this.items.splice(index, 1);
+    }
+  }
+},
 
     async handleSubmit(e) {
       console.log(this.npm);
