@@ -13,8 +13,8 @@ import Reporting from './../views/Reporting.vue';
 import HomeDashboard from './../views/HomeDashboard.vue';
 import KelolaUnit from "./../views/KelolaUnit.vue";
 import notFound from "./../views/notFound.vue";
-import ActivityLog from '../components/Admin/ActivityLog.vue';
-import UserAccesManagement from '../components/Admin/UserAccesManagement.vue';
+import ActivityLog from '../views/ActivityLog.vue';
+import UserAccesManagement from '../views/UserAccesManagement.vue';
 import { useAuthStores } from '../auth.';
 
 
@@ -30,13 +30,13 @@ const router = createRouter({
       }
     },
     {
-      path: '/UserAccesManagement',
-      name: 'UserAccesManagement',
+      path: '/user-acces-management',
+      name: 'user-acces-management',
       component: UserAccesManagement,
     },
     {
-      path: '/ActivityLog',
-      name: 'ActivityLog',
+      path: '/activity-log',
+      name: 'activity-log',
       component: ActivityLog,
     },
     {

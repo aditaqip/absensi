@@ -291,13 +291,13 @@
           }"
         >
           <router-link
-            to="/UserAccesManagement"
+            to="/user-acces-management"
             class="w-full p-4 hover:bg-[#537ABC] hover:text-white"
           >
             <div class="w-3/5 ml-auto">User Acces Management</div>
           </router-link>
           <router-link
-          to="/ActivityLog" 
+          to="/activity-log" 
             class="w-full p-4 hover:bg-[#537ABC] hover:text-white"
           >
             <div class="w-3/5 ml-auto">Logging</div>

@@ -1,6 +1,6 @@
 <template>
-  <div class="w-full overflow-y-hidden">
-    <div class="h-full">
+    <div class="w-full overflow-y-hidden">
+      <div class="h-full">
       <div class="p-5 bg-slate-100 h-full">
         <div
           class="lg:w-full px-5 py-3 rounded-lg block md:block bg-white relative overflow-x-auto"
