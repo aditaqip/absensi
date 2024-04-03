@@ -1,6 +1,6 @@
 <template>
-    <div class="w-full overflow-y-hidden">
-      <div class="h-full">
+  <div class="w-full overflow-y-hidden">
+    <div class="h-full">
       <div class="p-5 bg-slate-100 h-full">
         <div
           class="lg:w-full px-5 py-3 rounded-lg block md:block bg-white relative overflow-x-auto"
@@ -183,8 +183,18 @@ export default {
     return {
       selectedMonth: null,
       months: [
-        "Januari", "Februari", "Maret", "April", "Mei", "Juni",
-        "Juli", "Agustus", "September", "Oktober", "November", "Desember"
+        "Januari",
+        "Februari",
+        "Maret",
+        "April",
+        "Mei",
+        "Juni",
+        "Juli",
+        "Agustus",
+        "September",
+        "Oktober",
+        "November",
+        "Desember",
       ],
       selectedMonth: "",
       dropdownOpen: false,
@@ -212,24 +222,24 @@ export default {
     },
 
     search() {
-  // Bersihkan filteredData sebelum melakukan pencarian baru
-  this.filteredData = [];
+      // Bersihkan filteredData sebelum melakukan pencarian baru
+      this.filteredData = [];
 
-  // Lakukan pencarian berdasarkan kata kunci pencarian
-  this.filteredData = PesertaIndex.filter((item) => {
-    // Menggabungkan semua nilai dari setiap sel dalam baris menjadi satu string
-    const combinedValues = Object.values(item).join(' ').toLowerCase();
-    // Menggunakan toLowerCase() untuk pencocokan yang tidak bersifat case-sensitive
-    return combinedValues.includes(this.searchKeyword.toLowerCase());
-  });
+      // Lakukan pencarian berdasarkan kata kunci pencarian
+      this.filteredData = PesertaIndex.filter((item) => {
+        // Menggabungkan semua nilai dari setiap sel dalam baris menjadi satu string
+        const combinedValues = Object.values(item).join(" ").toLowerCase();
+        // Menggunakan toLowerCase() untuk pencocokan yang tidak bersifat case-sensitive
+        return combinedValues.includes(this.searchKeyword.toLowerCase());
+      });
 
-  // Periksa jika searchKeyword kosong
-  if (this.searchKeyword === "") {
-    this.DataPeserta = PesertaIndex;
-  } else {
-    this.DataPeserta = this.filteredData;
-  }
-},
+      // Periksa jika searchKeyword kosong
+      if (this.searchKeyword === "") {
+        this.DataPeserta = PesertaIndex;
+      } else {
+        this.DataPeserta = this.filteredData;
+      }
+    },
 
     exportDataToExcel() {
       if (PesertaIndex) {
@@ -268,7 +278,7 @@ export default {
     filteredEntries() {
       if (!this.selectedMonth) return this.dataEntries; // Jika belum ada bulan yang dipilih, tampilkan semua entri
 
-      return this.dataEntries.filter(entry => {
+      return this.dataEntries.filter((entry) => {
         const entryMonth = parseInt(entry.tanggalmsk.split("-")[1]);
         return this.months[entryMonth - 1] === this.selectedMonth;
       });
