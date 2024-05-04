@@ -1,32 +1,20 @@
-import axios from 'axios'
-
-const login = {
-    "email": "fianna@gmail.com",
-    "password": "123456"
-}
+import axios from 'axios';
 
 const checkLogin = (email, password) => {
+    const loginData = {
+        email: email,
+        password: password
+    };
 
-    axios.get('localhost:5173/login', {
-        "email": email,
-        "password": password
-    }).then((e) => {
-        console.log(e)
-    })
-    // return new Promise(function (resolve, reject) {     
-    //     if (login.email == email && login.password == password) {
-    //         const data = {
-    //             message : 'success',
-    //             data: {
-    //                 email: email,
-    //                 token: 123456
-    //             }
-    //         }
-    //       resolve(data);
-    //     } else {
-    //       reject(Error("wrong credentials"));
-    //     }
-    // });
-}
+    return axios.post('http://localhost:5173/login', loginData)
+        .then(response => {
+            console.log(response.data); // Di sini Anda dapat menangani respons dari server
+            return response.data; // Mengembalikan data respons untuk digunakan di luar fungsi
+        })
+        .catch(error => {
+            console.error(error); // Tangani kesalahan jika permintaan gagal
+            throw new Error("Login failed"); // Melemparkan error untuk ditangani oleh pemanggil
+        });
+};
 
 export default checkLogin;

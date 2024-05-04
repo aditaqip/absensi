@@ -47,10 +47,11 @@
             <div>
               Show
               <input
-                type="number"
-                class="ml-3 pl-5 w-16 h-6 border border-black rounded-lg my-8"
-                :value="dataMounted"
-              />
+  type="number"
+  class="ml-3 pl-5 w-16 h-6 border border-black rounded-lg my-8"
+  v-model="dataMounted"
+/>
+
             </div>
             <div class="flex items-center">
               <input
@@ -169,9 +170,9 @@
               id="npm-id"
               name="NPM"
               type="number"
-              v-model="numberInput"
+              v-model="npmInput"
               placeholder="Masukkan NPM"
-              @input="handleInput"
+              @input="handleNPMInput"
             />
           </div>
 
@@ -412,63 +413,54 @@
             ></v-select>
           </div>
 
-          <div
-            class="flex flex-col gap-3 w-full relative col-span-2 md:col-span-1"
-          >
-            <div>
-              <label class="font-semibold" for="commitAt-id'"
-                >Bulan Pelaksanaan</label
-              >
-            </div>
-            <v-select
-              v-model="commitAt"
-              name="ptnTpe"
-              :options="Bulan"
-              id="commitAt-id'"
-              :required="true"
-              :disabled="false"
-              placeholder="Masukkan Bulan Pelaksanaan"
-              class="select w-full cico-select rounded-xl"
-            ></v-select>
-          </div>
+<div class="flex flex-col gap-3 w-full relative col-span-2 md:col-span-1">
+  <div>
+    <label class="font-semibold" for="commitAt-id'">Bulan Pelaksanaan</label>
+  </div>
+  <v-select
+    v-model="commitAt"
+    name="ptnTpe"
+    :options="Bulan"
+    id="commitAt-id'"
+    :required="true"
+    :disabled="false"
+    placeholder="Masukkan Bulan Pelaksanaan"
+    class="select w-full cico-select rounded-xl"
+    @change="updateStartDate"
+  ></v-select>
+</div>
 
-          <div
-            class="flex flex-col gap-3 w-full relative col-span-2 md:col-span-1"
-          >
-            <div>
-              <label class="font-semibold" for="duration-id'"
-                >Durasi Magang</label
-              >
-            </div>
-            <v-select
-              v-model="duration"
-              name="ptnTpe"
-              :options="['3 Bulan', '4 Bulan', '6 Bulan', '12 Bulan']"
-              id="duration-id'"
-              :required="true"
-              :disabled="false"
-              placeholder="Masukkan Durasi Magang"
-              class="select w-full cico-select rounded-xl"
-            ></v-select>
-          </div>
+<div class="flex flex-col gap-3 w-full relative col-span-2 md:col-span-1">
+  <div>
+    <label class="font-semibold" for="duration-id'">Durasi Magang</label>
+  </div>
+  <v-select
+    v-model="duration"
+    name="ptnTpe"
+    :options="['3 Bulan', '4 Bulan', '6 Bulan', '12 Bulan']"
+    id="duration-id'"
+    :required="true"
+    :disabled="false"
+    placeholder="Masukkan Durasi Magang"
+    class="select w-full cico-select rounded-xl"
+    @change="updateEndDate"
+  ></v-select>
+</div>
 
-          <div>
-            <div class="flex">
-              <div class="w-1/2 pr-3">
-                <label class="font-semibold" for="start-date"
-                  >Tanggal Mulai</label
-                >
-                <div class="flex gap-3 flex-wrap">
-                  <datepicker
-                    ref="startDatepicker"
-                    class="border rounded border-black px-3 focus:outline-none py-3 pl-3 w-full"
-                    v-model="startDate"
-                    id="start-date"
-                    @input="updateEndDatepicker"
-                  ></datepicker>
-                </div>
-              </div>
-
+<div>
+  <div class="flex">
+    <div class="w-1/2 pr-3">
+      <label class="font-semibold" for="start-date">Tanggal Mulai</label>
+      <div class="flex gap-3 flex-wrap">
+        <datepicker
+          ref="startDatepicker"
+          class="border rounded border-black px-3 focus:outline-none py-3 pl-3 w-full"
+          v-model="startDate"
+          id="start-date"
+          @input="updateEndDatepicker"
+        ></datepicker>
+      </div>
+    </div>
               <div class="w-1/2 pl-3">
                 <label class="font-semibold" for="end-date"
                   >Tanggal Selesai</label
@@ -781,7 +773,7 @@ const datas = ref({});
 const createState = ref(false);
 const editState = ref(false);
 const deleteState = ref(false);
-const dataMounted = ref(15);
+const dataMounted = ref(50);
 const numberInput = ref("");
 const dataForExcel = [];
 const DataPeserta = ref();
@@ -843,8 +835,18 @@ export default {
   },
 
   mounted() {
+
     this.DataPeserta = PesertaIndex;
+      // Panggil method untuk memuat data awal
+    this.updateDisplayedData();
   },
+
+  watch: {
+  dataMounted() {
+    // Panggil method saat nilai dataMounted berubah
+    this.updateDisplayedData();
+  },
+},
 
   data() {
     return {
@@ -899,12 +901,85 @@ export default {
       pekerjaanOrtuRef,
       divisionRef,
       ptnTypeRef,
+
+      // Data untuk formulir tambah peserta
+      numberInput: '',
+      namaLengkap: '',
+      bornPlace: '',
+      bornAt: '',
+      genders: '',
+      ptnType: '',
+      instance: '',
+      pddk: '',
+      jurusan: '',
+      inputNumber: '',
+      magangType: '',
+      magangProgram: '',
+      commitAt: '',
+      duration: '',
+      startDate: '',
+      endDate: '',
+      division: '',
+      domisili: '',
+      namaOrtu: '',
+      pekerjaanOrtu: '',
+      // Data peserta yang akan ditampilkan dalam tabel
+      DataPeserta: [],
     };
+  },
+
+  computed: {
+    disabledDates() {
+      // Membuat daftar tanggal yang dinonaktifkan (misalnya, tanggal sebelum tanggal mulai)
+      const disabledDates = { to: new Date(this.startDate) };
+      return disabledDates;
+    },
   },
 
   name: "PesertaComponents",
   methods: {
-    
+    updateEndDate() {
+      // Menghitung tanggal selesai berdasarkan durasi yang dipilih
+      const newEndDate = new Date(this.startDate);
+      newEndDate.setMonth(newEndDate.getMonth() + parseInt(this.duration));
+      this.endDate = newEndDate;
+    },
+
+    handleSubmit() {
+      // Ambil semua data dari formulir tambah peserta
+      const newParticipant = {
+        Npm: this.npmInput,
+        name: this.namaLengkap,
+        NIK: this.numberInput, // Misalnya, NIK menggunakan numberInput, sesuaikan sesuai kebutuhan
+        Tempatlahir: this.bornPlace,
+        tglahir: this.bornAt,
+        gender: this.genders,
+        type: this.ptnType,
+        instance: this.instance,
+        pddk: this.pddk,
+        jurusan: this.jurusan,
+        namaDivpal: this.division, // Misalnya, namaDivpal menggunakan division, sesuaikan sesuai kebutuhan
+        unitKerja: this.division, // Misalnya, unitKerja menggunakan division, sesuaikan sesuai kebutuhan
+        tgls: this.startDate,
+        durasi: this.duration,
+        tgle: this.endDate,
+        Telp: this.inputNumber,
+        alamatDomisili: this.domisili,
+        parentName: this.namaOrtu,
+        parentJob: this.pekerjaanOrtu,
+      };
+      // Tambahkan data peserta baru ke dalam array DataPeserta
+      this.DataPeserta.push(newParticipant);
+      // Setelah ditambahkan, tutup pop-up tambah peserta
+      this.createState = false;
+    },
+
+    updateDisplayedData() {
+  // Batasi data yang ditampilkan berdasarkan nilai dataMounted
+  this.DataPeserta = PesertaIndex.slice(0, this.dataMounted);
+},
+
+
     search() {
   // Bersihkan filteredData sebelum melakukan pencarian baru
   this.filteredData = [];

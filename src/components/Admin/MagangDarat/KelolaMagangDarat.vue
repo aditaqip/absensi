@@ -13,7 +13,8 @@
               <input
                 type="number"
                 class="mx-3 pl-5 w-16 h-6 border border-black rounded-lg"
-                :value="dataMounted"
+                v-model="dataMounted"
+                @input="updateDataMounted"
               />Data
             </div>
             <download-excel
@@ -37,13 +38,9 @@
                 No Data
               </td>
             </tbody>
-            <tbody v-if="typeof PesertaIndex !== 'undefined'">
-              <tr
-                v-for="(index, items) in PesertaIndex.filter(
-                  (item) => item.JenisMagang === 'Magang Darat'
-                )"
-              >
-                <td class="text-center py-2 p-3">{{ ++items }}</td>
+            <tbody>
+              <tr v-for="(index, items) in slicedData" :key="index.ID">
+                <td class="text-center py-2 p-3">{{ items + 1 }}</td>
                 <td class="text-center py-2 p-3">{{ index.Npm }}</td>
                 <td class="text-center py-2 p-3">{{ index.name }}</td>
                 <td class="text-center py-2 p-3">
@@ -66,169 +63,58 @@
 </template>
 
 <script>
-import { ref, defineAsyncComponent } from "vue";
+import { ref } from "vue";
 import { PesertaIndex } from "../../../stores/Peserta.js";
 import JsonExcel from "vue-json-excel3";
 
-// let dataTable = reactive({})
-
-// const exportDataToExcel = () => {
-//   if (dataTable) {
-//     dataTable.forEach((d) => {
-//       const dataRow = {
-//         Nama: d.user.nama,
-//         Jabatan: d.user.jabatan.nama,
-//         'Jenis Kelamin': d.user.jenisKelamin === 'L' ? 'Laki-laki' : 'Perempuan',
-//         'Tempat Masuk': d.tempatMasuk,
-//         'Metode Masuk': d.metodeMasuk,
-//         'Metode Keluar': d.metodeKeluar ?? '-',
-//         'Waktu Masuk': new Date(d.waktuMasuk).toLocaleString('en-US', {
-//           year: 'numeric',
-//           month: 'short',
-//           day: 'numeric',
-//           hour: 'numeric',
-//           minute: 'numeric',
-//           hour12: true
-//         }),
-//         'Waktu Keluar': d.waktuKeluar
-//           ? new Date(d.waktuKeluar).toLocaleString('en-US', {
-//             year: 'numeric',
-//             month: 'short',
-//             day: 'numeric',
-//             hour: 'numeric',
-//             minute: 'numeric',
-//           })
-//           : '-'
-//       }
-//       dataForExcel.push(dataRow)
-//     })
-//   }
-// }
-
-const label = [
-  {
-    name: "NPM",
-  },
-  {
-    name: "Nama Lengkap",
-  },
-  {
-    name: "Jenis Kelamin",
-  },
-  {
-    name: "No. Telepon",
-  },
-  {
-    name: "Jurusan",
-  },
-  {
-    name: "Divisi",
-  },
-  {
-    name: "Unit Kerja",
-  },
-  {
-    name: "Tanggal Mulai",
-  },
-  {
-    name: "Durasi",
-  },
-  {
-    name: "Tanggal Selesai",
-  },
-];
-
-const createState = ref(false);
-const editState = ref(false);
-const deleteState = ref(false);
-const getId = ref(null);
-const dataForExcel = [];
-const data_update = ref(null);
-const dataMounted = ref(15);
-
-let i = 1;
-
-const data_effect = ref(PesertaIndex);
 export default {
   components: {
     downloadExcel: JsonExcel,
   },
-  setup: () => {
+  setup() {
+    const dataMounted = ref(50);
+    const dataForExcel = ref([]);
+
+    const updateDataMounted = () => {
+      slicedData.value = PesertaIndex.filter(
+        (item) => item.JenisMagang === "Magang Darat"
+      ).slice(0, dataMounted.value);
+    };
+
+    const exportDataToExcel = () => {
+      const filteredData = PesertaIndex.filter(
+        (item) => item.JenisMagang === "Magang Darat"
+      );
+
+      dataForExcel.value = filteredData.map((d, index) => ({
+        No: index + 1,
+        NPM: d.Npm,
+        "Nama Lengkap": d.name,
+        "Jenis Kelamin": d.gender,
+        "No Telp": d.Telp,
+        Jurusan: d.jurusan,
+        Divisi: d.namaDivpal,
+        "Unit Kerja": d.unitKerja,
+        "Tanggal Mulai": d.tgls,
+        Durasi: d.durasi,
+        "Tanggal Selesai": d.tgle,
+      }));
+
+      // Force re-render of downloadExcel component
+      dataForExcel.value = [...dataForExcel.value];
+    };
+
+    const slicedData = ref([]);
+    updateDataMounted();
+
     return {
       PesertaIndex,
-      label,
-      i,
-      createState,
-      editState,
-      deleteState,
       dataMounted,
       dataForExcel,
+      slicedData,
+      updateDataMounted,
+      exportDataToExcel,
     };
-  },
-  data() {
-    return {
-      dataMounted: 10, // Ganti dengan jumlah data default yang sesuai
-      filteredDataForExcel: [], // inisialisasi properti filteredDataForExcel
-    };
-  },
-  name: "KelolaMagangDaratComponents",
-  methods: {
-    exportDataToExcel() {
-      if (PesertaIndex) {
-        let i = 0; // Inisialisasi i di luar forEach
-        PesertaIndex.forEach((d) => {
-          if (d.JenisMagang === "Magang Darat") {
-            const dataRow = {
-              No: ++i,
-              NPM: d.Npm,
-              "Nama Lengkap": d.name,
-              "Jenis Kelamin": d.gender,
-              "No Telp": d.Telp,
-              Jurusan: d.jurusan,
-              Divisi: d.namaDivpal,
-              "Unit Kerja": d.unitKerja,
-              "Tanggal Mulai": d.tgls,
-              Durasi: d.durasi,
-              "Tanggal Selesai": d.tgle,
-            };
-            dataForExcel.push(dataRow);
-          }
-        });
-      }
-    },
-
-    escHandling() {
-      // this.createState = false
-      console.log("msk");
-    },
-    handleSubmit(e) {
-      const { [Object.keys(PesertaIndex).pop()]: lastItem } = PesertaIndex;
-      const newID = parseInt(lastItem.ID);
-
-      PesertaIndex.push({
-        Division: this.nama,
-        ID: newID + 1,
-      });
-      this.nama = "";
-      createState.value = false;
-    },
-    deleted(id) {
-      PesertaIndex.splice(
-        PesertaIndex.findIndex((a) => a.ID === id),
-        1
-      );
-      getId.value = null;
-      deleteState.value = false;
-    },
-    getUpdated(data) {
-      this.nama = data.Division;
-    },
-    edited(id) {
-      let no = PesertaIndex.findIndex((a) => a.ID === id);
-      PesertaIndex[no].Division = this.nama;
-      this.nama = "";
-      editState.value = false;
-    },
   },
 };
 </script>

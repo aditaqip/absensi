@@ -36,7 +36,7 @@
             v-model="npm"
             label="Nomor Peserta Magang"
             :required="true"
-            v-on:focusout="GetUserss()"
+            v-on:focusout="GetUsers"
           />
           <inputText
             v-model="nama"
@@ -50,12 +50,12 @@
             :required="true"
             :disabled="true"
           />
-          <inputText
+          <!-- <inputText
             v-model="divisikapal"
             label="Nama Divisi/Kapal"
             :required="true"
             :disabled="true"
-          />
+          /> -->
           <inputText
             v-model="unitKerja"
             label="Unit Kerja Magang"
@@ -148,7 +148,7 @@ export default {
       date: new Date(),
       day: null,
       month: null,
-      npm: null,
+      npm: this.Npm,
       nama: "",
       magangType: "",
       absensiType: null,
@@ -237,34 +237,44 @@ export default {
       return month[i];
     },
     submitHandling() {
-      if (this.nama == "") this.nama.value = true;
-      if (this.magangType == "") this.magangType.value = true;
-      if (this.absensiType == "") this.absensiType.value = true;
-      if (this.unitKerja == "") this.unitKerja.value = true;
-      if (this.latitude == "") this.latitude.value = true;
-      if (this.longitude == "") this.longitude.value = true;
+      // Pastikan semua data yang diperlukan diisi sebelum mengirim permintaan
+      if (
+        !this.nama ||
+        !this.magangType ||
+        !this.absensiType ||
+        !this.unitKerja ||
+        !this.latitude ||
+        !this.longitude
+      ) {
+        alert("Harap lengkapi semua kolom sebelum melanjutkan.");
+        return;
+      }
 
-      // if(namaRef) return false
-      // if(magangTypeRef) return false
-      // if(absensiTypeRef) return false
-      // if(unitKerjaRef) return false
-      // if(latitudeRef) return false
-      // if(longitudeRef) return false
-      let PARAM = [
-        { key: "npm", value: this.npm },
-        { key: "divisi", value: this.unitKerja },
-        { key: "kapal", value: this.kapal },
-        { key: "location", value: [this.latitude, this.longitude] },
-        { key: "typemagang", value: this.magangType },
-      ];
-      let url = "?";
-      PARAM.forEach((element) => {
-        url += element.key + "=" + element.value + "&";
-      });
+      // Persiapkan data untuk dikirim ke backend
+      const data = {
+        user: {
+          Npm: this.npm,
+          // jenisAbsen: this.absensiType// Ganti dengan ID pengguna yang sesuai
+        },
+      };
 
-      axios.post("/checkin" + url).then((e) => {
-        console.log(e);
-      });
+      // Kirim permintaan ke backend menggunakan Axios
+      axios
+        .post("http://10.100.231.86:8080/api/check-in", data, {
+          headers: {
+            // 'Content-Type': 'application/json',
+            // 'Authorization': 'Bearer eyJhbGciOiJIUzM4NCJ9.eyJzdWIiOiJpY2FkLnNpbmFnYUBnbWFpbC5jb20iLCJpYXQiOjE3MTQ0NDMxODAsImV4cCI6MTcxNDUyOTU4MH0.A0Q9WMoZsRsazVVlJktDYOsHNH1BwEEyUWdahFOI3XL0_-SIcZF0tEBR_SugtMsp'
+            // Ganti dengan token otorisasi yang sesuai
+          },
+        })
+        .then((response) => {
+          console.log("Respon:", response.data);
+          // Lakukan tindakan sesuai dengan respons dari backend
+        })
+        .catch((error) => {
+          console.error("Error:", error);
+          alert("Terjadi kesalahan saat mengirim data ke backend.");
+        });
     },
 
     GetUserss() {
@@ -284,51 +294,102 @@ export default {
       }
     },
 
+    // async GetUsers() {
+    //   try {
+    //     // Lakukan permintaan untuk mendapatkan data peserta berdasarkan npm
+    //     const response = await axios.get(`/api/check/in/${this.npm}`);
+    //     const data = response.data;
+
+    //     // Isikan nilai yang diperoleh dari respons ke dalam kolom yang bersangkutan
+    //     this.nama = data.nama;
+    //     this.magangType = data.magangType;
+    //     this.unitKerja = data.unitKerja;
+    //   } catch (error) {
+    //     console.error("Error fetching data:", error);
+    //     alert("Terjadi kesalahan saat mengambil data.");
+    //   }
+
+    //   await axios.get(`/api/check/in/${this.npm}`).then((e) => {
+    //     this.nama = e.data.content[0].namalengkap;
+    //     this.magangType = e.data.content[0].jenismagang;
+    //     this.absensiType = "Check In";
+    //     this.unitKerja = e.data.content[0].divisipenempatan;
+
+    //     const dataPeserta = PesertaIndex.find(
+    //       (peserta) => peserta.Npm === this.npm
+    //     );
+    //     if (dataPeserta) {
+    //       // Isikan nilai ke kolom-kolom lainnya
+    //       this.nama = dataPeserta.name;
+    //       this.magangType = dataPeserta.type;
+    //       this.absensiType = dataPeserta["Nama Divisi/Kapal"];
+    //       this.unitKerja = dataPeserta["Unit Kerja Magang"];
+    //     } else {
+    //       // Pesan jika npm tidak ditemukan
+    //       alert("Nomor Peserta Magang tidak ditemukan.");
+    //       // Reset nilai kolom lainnya
+    //       this.nama = "";
+    //       this.magangType = "";
+    //       this.absensiType = "";
+    //       this.unitKerja = "";
+    //     }
+
+    //     // document.querySelector("#unitKerja-id").value = e.data.content[0].divisipenempatan
+    //     // document.querySelector("#magangType-id").value = e.data.content[0].jenismagang
+    //     // document.querySelector("#absensiType-id").value = "Check In"
+    //   });
+    // },
+
     async GetUsers() {
       try {
-        // Lakukan permintaan untuk mendapatkan data peserta berdasarkan npm
-        const response = await axios.get("/search_dataByNpm?npm=" + this.npm);
-        const data = response.data;
+        console.log(this.npm);
 
-        // Isikan nilai yang diperoleh dari respons ke dalam kolom yang bersangkutan
-        this.nama = data.nama;
-        this.magangType = data.magangType;
-        this.absensiType = data.absensiType;
-        this.unitKerja = data.unitKerja;
+        // Perform a request to get participant data based on npm
+        // const response = await axios.get(
+        //   `http://10.100.231.86:8080/api/check-in/${this.npm}`
+        // );
+        let config = {
+          method: "get",
+          maxBodyLength: Infinity,
+          url: "http://10.100.231.86:8080/api/check-in/1238912",
+          headers: {},
+        };
+
+        axios
+          .request(config)
+          .then((response) => {
+            console.log(JSON.stringify(response.data));
+          })
+          .catch((error) => {
+            console.log(error);
+          });
+
+        // const response = await axios.get(
+        //   `http://10.100.231.86:8080/api/check-in/1238912`
+        // );
+        // const data = response.data;
+
+        // // Check if data is present
+        // if (data.content && data.content.length > 0) {
+        //   // Extract data from the response
+        //   const content = data.content[0];
+        //   this.nama = content.namaLengkap;
+        //   this.magangType = content.jenisMagang;
+        //   this.unitKerja = content.unitKerja;
+        // } else {
+        //   console.log(this.npm);
+        //   // Handle case where data is not found
+        //   // alert("Nomor Peserta Magang tidak ditemukan.");
+        //   // Reset values
+        //   this.nama = "";
+        //   this.magangType = "";
+        //   this.unitKerja = "";
+        // }
       } catch (error) {
+        // Handle errors here
         console.error("Error fetching data:", error);
         alert("Terjadi kesalahan saat mengambil data.");
       }
-
-      await axios.get("/search_dataByNpm?npm=" + this.npm).then((e) => {
-        this.nama = e.data.content[0].namalengkap;
-        this.magangType = e.data.content[0].jenismagang;
-        this.absensiType = "Check In";
-        this.unitKerja = e.data.content[0].divisipenempatan;
-
-        const dataPeserta = PesertaIndex.find(
-          (peserta) => peserta.Npm === this.npm
-        );
-        if (dataPeserta) {
-          // Isikan nilai ke kolom-kolom lainnya
-          this.nama = dataPeserta.name;
-          this.magangType = dataPeserta.type;
-          this.absensiType = dataPeserta["Nama Divisi/Kapal"];
-          this.unitKerja = dataPeserta["Unit Kerja Magang"];
-        } else {
-          // Pesan jika npm tidak ditemukan
-          alert("Nomor Peserta Magang tidak ditemukan.");
-          // Reset nilai kolom lainnya
-          this.nama = "";
-          this.magangType = "";
-          this.absensiType = "";
-          this.unitKerja = "";
-        }
-
-        // document.querySelector("#unitKerja-id").value = e.data.content[0].divisipenempatan
-        // document.querySelector("#magangType-id").value = e.data.content[0].jenismagang
-        // document.querySelector("#absensiType-id").value = "Check In"
-      });
     },
     getDivisi(divisi, value) {
       length = divisi.length;
@@ -352,6 +413,7 @@ export default {
         .catch((e) => console.log(e));
     },
   },
+
   name: "ci",
   components: {
     Time,

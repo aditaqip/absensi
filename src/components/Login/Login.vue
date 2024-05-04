@@ -1,5 +1,11 @@
 <template>
   <div class="flex items-center justify-center h-screen">
+    <div v-if="error" class="absolute top-0 left-0 w-full h-full flex justify-center items-center bg-black bg-opacity-50">
+      <div class="bg-white p-4 rounded-lg">
+        <p class="text-red-500">{{ error }}</p>
+        <button @click="resetError" class="mt-2 bg-blue-500 text-white px-4 py-2 rounded-md">Close</button>
+      </div>
+    </div>
     <form
       @submit.prevent="loginStore.login(email, password)"
       class="w-full flex justify-center"
@@ -70,7 +76,7 @@
 <script>
 import Input from "./../Forms/partials/login/input.vue";
 import checkLogin from "../../stores/login.js";
-import { useAuthStores } from "../../auth.";
+import { useAuthStores } from "../../auth."; // misteri kenapa harus auth.
 import loading from "../../assets/images/loading.vue";
 
 export default {
@@ -103,22 +109,32 @@ export default {
       loginStore,
     };
   },
-  methods: {
-    postData() {
-      const dataToSend = {
-        username: login.email,
-        password: login.password,
-      };
 
-      axios
-        .post('http://localhost:8080/api/v1/auth/authenticate', dataToSend)
-        .then((response) => {
-          console.log("Data berhasil dikirim:", response.data);
-        })
-        .catch((error) => {
-          console.error("Error posting data:", error);
-        });
-    },
+  async login() {
+  try {
+    await this.loginStore.login(this.email, this.password);
+  } catch (error) {
+    console.error("Error:", error); // Tambahkan log error
+    this.error = "Email or password is incorrect"; // Set error message
+  }
+},
+
+  methods: {
+    // postData() {
+    //   const dataToSend = {
+    //     username: login.email,
+    //     password: login.password,
+    //   };
+
+    //   axios
+    //     .post('http://localhost:8080/api/v1/auth/authenticate', dataToSend)
+    //     .then((response) => {
+    //       console.log("Data berhasil dikirim:", response.data);
+    //     })
+    //     .catch((error) => {
+    //       console.error("Error posting data:", error);
+    //     });
+    // },
     // return new Promise(function (resolve, reject) {
     //     if (login.email == email && login.password == password) {
     //         const data = {

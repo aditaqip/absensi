@@ -55,9 +55,11 @@
               <label for="editAdminName" class="text-sm font-semibold mb-1">Nama Admin</label>
               <input v-model="editedAdminCopy.name" type="text" id="editAdminName" class="w-full px-3 py-2 border rounded-md mb-2" placeholder="Nama Admin" />
               <label for="editAdminRole" class="text-sm font-semibold mb-1">Role</label>
+              <!-- Dropdown Role -->
               <select v-model="editedAdminCopy.role" id="editAdminRole" class="w-full px-3 py-2 border rounded-md mb-2">
                 <option v-for="role in roles" :key="role" :value="role">{{ role }}</option>
               </select>
+              <!-- Akhir Dropdown Role -->
               <label for="editAdminUsername" class="text-sm font-semibold mb-1">Username</label>
               <input v-model="editedAdminCopy.username" type="text" id="editAdminUsername" class="w-full px-3 py-2 border rounded-md mb-2" placeholder="Username" />
               <label for="editAdminPassword" class="text-sm font-semibold mb-1">Password</label>
@@ -83,10 +85,8 @@
           <!-- Akhir Dropdown Role -->
           <label for="newAdminUsername" class="text-sm font-semibold mb-1">Username</label>
           <input v-model="newAdminUsername" type="text" class="w-full px-3 py-2 border rounded-md mb-2" placeholder="Username" />
-          <div class="relative">
-            <label for="newAdminUsername" class="text-sm font-semibold mb-1">Password</label>
-            <input v-model="newAdminPassword" type="password" class="w-full px-3 py-2 border rounded-md mb-2" placeholder="Password" />
-          </div>
+          <label for="newAdminUsername" class="text-sm font-semibold mb-1">Password</label>
+          <input v-model="newAdminPassword" type="password" class="w-full px-3 py-2 border rounded-md mb-2" placeholder="Password" />
         </div>
         <!-- Tombol untuk menambahkan atau mengubah peran -->
         <button type="submit" :disabled="!isValidAdmin" class="px-4 py-2 bg-emerald-500 text-white rounded">Add User</button>
@@ -97,6 +97,12 @@
 
 <script>
 export default {
+  props: {
+    roles: {
+      type: Array,
+      required: true
+    }
+  },
   data() {
     return {
       editedAdminCopy: {
@@ -145,8 +151,7 @@ export default {
         username: "",
         password: "",
         passwordHidden: true,
-      },
-      roles: ["Admin", "User"], // Daftar role yang tersedia
+      }
     };
   },
   methods: {
@@ -184,7 +189,7 @@ export default {
 
       // Reset input fields
       this.newAdminName = "";
-      this.newAdminRole = "";
+      this.newAdminRole = ""; // Reset dropdown role ke nilai default
       this.newAdminUsername = "";
       this.newAdminPassword = "";
       this.newAdminPasswordHidden = true;

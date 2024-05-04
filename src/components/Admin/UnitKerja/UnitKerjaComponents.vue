@@ -5,9 +5,7 @@
         <div class="px-5 py-3 rounded-lg bg-white">
           <h1 class="text-xl py-2">Data Unit Kerja</h1>
           <hr />
-          <div
-            class="flex md:justify-between md:items-center flex-col md:flex-row"
-          >
+          <div class="flex md:justify-between md:items-center flex-col md:flex-row">
             <button
               class="bg-[#0D6EFD] text-white rounded pl-[10px] pt-[6px] pr-[35px] pb-[5px] flex gap-2 my-4"
               v-on:click="createState = !createState"
@@ -44,42 +42,37 @@
             <thead class="w-3/5 font-thin">
               <tr class="border-b-[1px]">
                 <th class="py-2">No</th>
-                <th class="py-2" v-for="head in label">{{ head.name }}</th>
-                <th class="py-2 w-20"></th>
+                <th class="py-2">Nama Unit Kerja</th>
               </tr>
             </thead>
-            <tbody v-if="typeof UnitKerjaIndex == 'undefined'">
-              <div class="w-full">No Data</div>
-            </tbody>
-            <tbody v-if="typeof UnitKerjaIndex != 'undefined'">
-              <tr v-for="(index, items) in UnitKerjaIndex">
-                <td class="text-center py-2">{{ ++items }}</td>
-                <td class="text-center py-2">{{ index.namaunitkerja }}</td>
-                <td class="flex py-2 justify-center items-center w-32 gap-2">
-                  <a
-                    class="w-1/2 flex justify-center cursor-pointer rounded bg-[#0D6EFD] text-white py-1 px-5"
-                    href="#"
-                    v-on:click="
-                      editState = !editState;
-                      getId = index.idunitkerja;
-                      data_update = index;
-                      getUpdated(data_update);
-                    "
+            <tbody>
+              <tr v-for="(unitkerja, index) in unitKerjaList" :key="index">
+                <td class="text-center py-2">{{ index + 1 }}</td>
+                <td class="text-center py-2">{{ unitkerja }}</td>
+                <td class="text-center py-2">
+                  <button
+                    class="text-gray-500 hover:text-gray-600 rounded-full px-2"
+                    @click="deleteUnitKerja(index)"
                   >
-                    Edit
-                  </a>
-                  <a
-                    class="w-1/2 flex justify-center cursor-pointer rounded bg-[#DC3545] text-white py-1 px-5"
-                    v-on:click="
-                      deleteState = !deleteState;
-                      getId = index.idunitkerja;
-                      data_update = index;
-                      getUpdated(data_update);
-                    "
-                  >
-                    Delete
-                  </a>
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="16"
+                      height="16"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="2"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                    >
+                      <line x1="18" y1="6" x2="6" y2="18" />
+                      <line x1="6" y1="6" x2="18" y2="18" />
+                    </svg>
+                  </button>
                 </td>
+              </tr>
+              <tr v-if="unitKerjaList.length === 0">
+                <td colspan="3" class="text-center py-2">No Data</td>
               </tr>
             </tbody>
           </table>
@@ -132,107 +125,27 @@
 </template>
 
 <script>
-import { ref, defineAsyncComponent } from "vue";
-import axios from "axios";
-
-const label = [
-  {
-    name: "Nama Unit Kerja",
-  },
-];
-
-
-const createState = ref(false);
-const editState = ref(false);
-const deleteState = ref(false);
-
-const getId = ref(null);
-
-const data_update = ref(null);
-const nameRef = ref(false);
-const UnitKerjaIndex = ref(false);
-
-let i = 1;
-
-const data_effect = ref(UnitKerjaIndex);
 export default {
-  created() {
-    this.$watch(
-      () => this.$route.params,
-      () => {
-        this.getDataUnitKerja(this.size);
-      },
-      // fetch the data when the view is created and the data is
-      // already being observed
-      { immediate: true }
-    );
-  },
-  components: {},
-  setup: () => {
-    return {
-      UnitKerjaIndex,
-      label,
-      i,
-      createState,
-      editState,
-      deleteState,
-      size: 5,
-    };
-  },
   data() {
     return {
-      nama: "",
+      unitKerjaList: ['Cabang Merak', 'Cabang Bakauheni', 'Kantor Pusat'],
+      createState: false,
+      nama: '',
+      size: 5
     };
   },
-  name: "UnitKerjaComponents",
   methods: {
-    async handleSubmit(e) {
-      nameRef.value = this.nama != "" ? false : true;
-
-      if (nameRef.value) return false;
-      await axios
-        .post("/unitkerja", {
-          nama: this.nama,
-        })
-        .then((e) => {
-          this.getDataUnitKerja(this.size);
-          console.log(e);
-        })
-        .catch((e) => console.log(e));
+    handleSubmit() {
+      if (this.nama.trim() === '') return;
+      this.unitKerjaList.push(this.nama.trim());
+      this.nama = '';
+      this.createState = false;
     },
-    async deleted(id) {
-      await axios
-        .delete("/unitkerja/" + id)
-        .then((e) => {
-          this.getDataUnitKerja(this.size);
-        })
-        .catch((e) => console.log(e));
-    },
-    getUpdated(data) {
-      this.nama = data.namadivisi;
-    },
-    async edited(id) {
-      if (this.nama == "") return false;
-
-      await axios
-        .put("/unitkerja/" + id, {
-          nama: this.nama,
-        })
-        .then((e) => {
-          this.getDataUnitKerja(this.size);
-        })
-        .catch((e) => console.log(e));
-    },
-    async getDataUnitKerja(size = 10, page = 0) {
-      await axios
-        .get("/unitkerja?size=" + size + "&page=" + page)
-        .then((e) => {
-          this.UnitKerjaIndex = e.data.content;
-          console.log(this.UnitKerjaIndex);
-        })
-        .catch((e) => console.log(e));
-    },
-  },
+    deleteUnitKerja(index) {
+      this.unitKerjaList.splice(index, 1);
+    }
+  }
 };
 </script>
+
 <style lang=""></style>

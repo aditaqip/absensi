@@ -2,9 +2,7 @@
   <div class="w-full overflow-y-hidden">
     <div class="h-full">
       <div class="p-5 bg-slate-100 h-full">
-        <div
-          class="lg:w-full px-5 py-3 rounded-lg block md:block bg-white relative overflow-x-auto"
-        >
+        <div class="lg:w-full px-5 py-3 rounded-lg block md:block bg-white relative overflow-x-auto">
           <h1 class="text-xl py-2">Report Absen Magang</h1>
           <div class="flex justify-end mb-2">
             <download-excel
@@ -23,8 +21,10 @@
               <input
                 type="number"
                 class="mx-3 pl-5 w-16 h-6 border border-black rounded-lg"
-                :value="dataMounted"
-              />Data
+                v-model="dataMounted"
+                min="1"
+                :max="DataPeserta.length"
+              /> Data
             </div>
             <div class="flex justify-around gap-10">
               <div class="flex items-center">
@@ -33,7 +33,7 @@
                   v-model="searchKeyword"
                   placeholder="Search..."
                   class="border border-gray-300 px-3 py-2 rounded-lg mr-3"
-                  v-on:keyup="search"
+                  @keyup="handleSearch"
                 />
               </div>
               <div class="relative">
@@ -70,6 +70,12 @@
                     >
                       {{ month }}
                     </div>
+                    <div
+                      class="px-4 py-2 text-gray-800 cursor-pointer hover:bg-gray-100"
+                      @click="clearFilterAndCloseDropdown"
+                    >
+                      Batalkan Filter
+                    </div>
                   </div>
                 </div>
               </div>
@@ -82,24 +88,31 @@
                 <th class="py-2 px-7" v-for="head in label">{{ head.name }}</th>
               </tr>
             </thead>
-            <tbody v-if="PesertaIndex.length == 0">
+            <tbody v-if="loading">
+              <tr>
+                <td colspan="99" class="text-center h-20 bg-slate-100">
+                  Loading...
+                </td>
+              </tr>
+            </tbody>
+            <tbody v-else-if="DataPesertaFiltered.length === 0">
               <tr>
                 <td colspan="99" class="text-center h-20 bg-slate-100">
                   No Data
                 </td>
               </tr>
             </tbody>
-            <tbody v-if="typeof DataPeserta !== 'undefined'">
-              <tr v-for="(index, items) in DataPeserta">
-                <td class="text-center py-2 px-4">{{ ++items }}</td>
-                <td class="text-center py-2 px-4">{{ index.Npm }}</td>
-                <td class="text-center py-2 px-4 w-60">{{ index.name }}</td>
-                <td class="text-center py-2 px-4">{{ index.jenisAbsen }}</td>
-                <td class="text-center py-2 px-4">{{ index.unitKerja }}</td>
-                <td class="text-center py-2 px-4">{{ index.namaDivpal }}</td>
-                <td class="text-center py-2 px-4">{{ index.tanggalmsk }}</td>
-                <td class="text-center py-2 px-4">{{ index.checkIn }}</td>
-                <td class="text-center py-2 px-4">{{ index.checkOut }}</td>
+            <tbody v-else>
+              <tr v-for="(item, index) in DataPesertaFiltered.slice(0, dataMounted)">
+                <td class="text-center py-2 px-4">{{ index + 1 }}</td>
+                <td class="text-center py-2 px-4">{{ item.Npm }}</td>
+                <td class="text-center py-2 px-4 w-60">{{ item.name }}</td>
+                <td class="text-center py-2 px-4">{{ item.jenisAbsen }}</td>
+                <td class="text-center py-2 px-4">{{ item.unitKerja }}</td>
+                <td class="text-center py-2 px-4">{{ item.namaDivpal }}</td>
+                <td class="text-center py-2 px-4">{{ item.tanggalmsk }}</td>
+                <td class="text-center py-2 px-4">{{ item.checkIn }}</td>
+                <td class="text-center py-2 px-4">{{ item.checkOut }}</td>
               </tr>
             </tbody>
           </table>
@@ -110,78 +123,16 @@
 </template>
 
 <script>
-import { ref, defineAsyncComponent } from "vue";
+import { ref } from "vue";
 import { PesertaIndex } from "../../../stores/Peserta.js";
 import JsonExcel from "vue-json-excel3";
 
-const searchState = ref(false);
-
-const label = [
-  {
-    name: "NPM",
-  },
-  {
-    name: "Nama",
-  },
-  {
-    name: "Jenis Absen",
-  },
-  {
-    name: "Unit Kerja",
-  },
-  {
-    name: "Divisi/Kapal",
-  },
-  {
-    name: "Tanggal Masuk",
-  },
-  {
-    name: "Check In",
-  },
-  {
-    name: "Check Out",
-  },
-];
-
-const createState = ref(false);
-const editState = ref(false);
-const deleteState = ref(false);
-const DataPeserta = ref();
-const getId = ref(null);
-const dataForExcel = [];
-const data_update = ref(null);
-const dataMounted = ref(15);
-
-let i = 1;
-
-const data_searched = ref({});
-
-const data_effect = ref(PesertaIndex);
 export default {
   components: {
     downloadExcel: JsonExcel,
   },
-  setup: () => {
-    return {
-      PesertaIndex,
-      label,
-      i,
-      createState,
-      editState,
-      deleteState,
-      dataMounted,
-      searchState,
-      dataForExcel,
-    };
-  },
-
-  mounted() {
-    this.DataPeserta = PesertaIndex;
-  },
-
   data() {
     return {
-      selectedMonth: null,
       months: [
         "Januari",
         "Februari",
@@ -196,94 +147,91 @@ export default {
         "November",
         "Desember",
       ],
-      selectedMonth: "",
+      selectedMonth: null,
       dropdownOpen: false,
-      selectedOption: "",
-      DataPeserta,
+      PesertaIndex,
       searchKeyword: "",
-      nama: "",
-      seacrh: "",
+      DataPeserta: [],
+      dataForExcel: [],
+      loading: true, // Tambahkan indikator loading
+      label: [ // Definisikan label di sini
+        { name: "NPM" },
+        { name: "Nama" },
+      ],
+      dataMounted: 50, // Jumlah data default yang ditampilkan
     };
   },
-  name: "ReportingComponents",
+  computed: {
+    DataPesertaFiltered() {
+      if (this.selectedMonth) {
+        return this.DataPeserta.filter(
+          (item) =>
+            new Date(item.tanggalmsk).getMonth() ===
+            this.months.indexOf(this.selectedMonth)
+        );
+      } else {
+        return this.DataPeserta;
+      }
+    },
+  },
   methods: {
     toggleDropdown() {
       this.dropdownOpen = !this.dropdownOpen;
     },
     selectMonth(month) {
       this.selectedMonth = month;
-      this.dropdownOpen = false;
+      this.search();
+      this.dropdownOpen = false; // Tutup dropdown setelah memilih
     },
-    getMonthFromTanggalmsk(tanggalmsk) {
-      // Split tanggalmsk berdasarkan "-" dan ambil elemen kedua (indeks 1), yang merupakan bulan
-      const monthNumber = parseInt(tanggalmsk.split("-")[1]);
-      // Mengembalikan nama bulan sesuai dengan indeksnya
-      return this.months[monthNumber - 1];
-    },
-
-    search() {
-      // Bersihkan filteredData sebelum melakukan pencarian baru
-      this.filteredData = [];
-
-      // Lakukan pencarian berdasarkan kata kunci pencarian
-      this.filteredData = PesertaIndex.filter((item) => {
-        // Menggabungkan semua nilai dari setiap sel dalam baris menjadi satu string
-        const combinedValues = Object.values(item).join(" ").toLowerCase();
-        // Menggunakan toLowerCase() untuk pencocokan yang tidak bersifat case-sensitive
-        return combinedValues.includes(this.searchKeyword.toLowerCase());
-      });
-
-      // Periksa jika searchKeyword kosong
-      if (this.searchKeyword === "") {
-        this.DataPeserta = PesertaIndex;
+    handleSearch() {
+      // Menjalankan fungsi pencarian hanya jika ada kata kunci pencarian
+      if (this.searchKeyword.trim() !== "") {
+        const keyword = this.searchKeyword.toLowerCase();
+        this.DataPeserta = this.PesertaIndex.filter((item) =>
+          Object.values(item).some((value) =>
+            value.toString().toLowerCase().includes(keyword)
+          )
+        );
       } else {
-        this.DataPeserta = this.filteredData;
+        this.search();
       }
     },
+    search() {
+      this.loading = true; // Aktifkan indikator loading saat pencarian dimulai
 
-    exportDataToExcel() {
-      if (PesertaIndex) {
-        PesertaIndex.forEach((d, i) => {
-          const dataRow = {
-            No: ++i,
-            NPM: d.Npm,
-            "Nama Lengkap": d.name,
-            "Jenis Absen": d.jenisAbsen,
-            "Unit Kerja": d.unitKerja,
-            "Divisi/Kapal": d.namaDivpal,
-            "Tanggal Masuk": d.tanggalmsk,
-            "Check-In": d.checkIn,
-            "Check-Out": d.checkOut,
-          };
-          dataForExcel.push(dataRow);
-        });
+      if (!this.selectedMonth && this.searchKeyword.trim() === "") {
+        this.DataPeserta = this.PesertaIndex;
       }
+
+      // Matikan indikator loading setelah data ditemukan
+      this.loading = false;
+    },
+    exportDataToExcel() {
+      this.dataForExcel = this.DataPesertaFiltered.map((d, i) => ({
+        No: i + 1,
+        NPM: d.Npm,
+        "Nama Lengkap": d.name,
+        "Jenis Absen": d.jenisAbsen,
+        "Unit Kerja": d.unitKerja,
+        "Divisi/Kapal": d.namaDivpal,
+        "Tanggal Masuk": d.tanggalmsk,
+        "Check-In": d.checkIn,
+        "Check-Out": d.checkOut,
+      }));
+    },
+    clearFilter() {
+      this.selectedMonth = null;
+      this.searchKeyword = "";
+      this.search();
+    },
+    clearFilterAndCloseDropdown() {
+      this.clearFilter();
+      this.dropdownOpen = false; // Tutup dropdown setelah membatalkan filter
     },
   },
-
-  computed: {
-    onSearch() {
-      let data = this.PesertaIndex.filter((object) => {
-        console.log(this.seacrh);
-
-        return JSON.stringify(object)
-          .toString()
-          .toLowerCase()
-          .includes(this.seacrh);
-      });
-    },
-    getData() {
-      return this.PesertaIndex;
-    },
-    filteredEntries() {
-      if (!this.selectedMonth) return this.dataEntries; // Jika belum ada bulan yang dipilih, tampilkan semua entri
-
-      return this.dataEntries.filter((entry) => {
-        const entryMonth = parseInt(entry.tanggalmsk.split("-")[1]);
-        return this.months[entryMonth - 1] === this.selectedMonth;
-      });
-    },
+  mounted() {
+    // Panggil metode search() di sini untuk memastikan data ditampilkan saat komponen dimuat
+    this.search();
   },
 };
 </script>
-<style></style>

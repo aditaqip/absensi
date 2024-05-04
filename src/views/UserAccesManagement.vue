@@ -2,9 +2,9 @@
   <div>
     <Main>
       <!-- User Management Component -->
-      <UserManagement :roles="roles" />
+      <UserManagement :roles="roles.roleOptions" :admins="admins" :delete-admin="deleteAdmin" />
       <!-- Role Management Component -->
-      <RoleManagement @role-added="updateRoles" />
+      <RoleManagement :roles="roles.roleOptions" @role-added="addRoleToUserManagement" />
     </Main>
   </div>
 </template>
@@ -21,29 +21,28 @@ export default {
     UserManagement,
     RoleManagement,
   },
-  data() {
-    return {
-      roles: []
-    };
-  },
-  methods: {
-    updateRoles(newRoleData) {
-      // Memperbarui roles dengan data role baru
-      this.roles.push(newRoleData);
-    }
-  },
   setup() {
+    const roles = ref({
+      roleOptions: ["Admin", "User"], // Inisialisasi dengan nilai awal
+    });
+
     const admins = ref([
-      // Inisialisasi data admin
+      // Tambahkan data admin di sini
     ]);
 
     const deleteAdmin = (adminId) => {
       // Logika penghapusan admin
     };
 
+    const addRoleToUserManagement = (newRole) => {
+      roles.value.roleOptions.push(newRole.name);
+    };
+
     return {
+      roles,
       admins,
       deleteAdmin,
+      addRoleToUserManagement,
     };
   },
 };
